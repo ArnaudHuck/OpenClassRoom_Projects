@@ -1,80 +1,141 @@
-from simple_term_menu import TerminalMenu
-
-all_players = []
-
-
-class Player:
-    def __init__(self, first_name, last_name, date_of_birth, sex, rating):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.date_of_birth = date_of_birth
-        self.sex = sex
-        self.rating = rating
-
-    def name(self):
-        return " ".join([self.first_name, self.last_name])
-
-    def __str__(self):
-        return f'{self.name()}({self.rating})'
+from basecontroller import BaseController
+from operator import attrgetter
+import re
+from Player_model import Player
+from Player_view import PlayerView
 
 
-class View:
-    def prompt_for_new_player(self):
-        player_first_name = input("Type player first name: ")
-        player_last_name = input("Type player last name: ")
-        player_date_of_birth = input("Type player date of birth: ")
-        player_gender = input("Type player gender M/F: ")
-        player_rating = input("Type Rating of the player: ")
-        new_player = [player_first_name, player_last_name, player_date_of_birth, player_gender, player_rating]
-        if new_player == "":
-            return None
-        return new_player
+class PlayerController(BaseController):
 
-    def prompt_player_menu(self):
-        main_menu = ["[a] Add Player", "[b] Create Player reports", "[q] quit"]
-        sub_menu = ["[a] Alphabetical", "[b] Ranking", "[c] go back"]
+    @staticmethod
+    def option_choice():
+        PlayerView.display_options()
+        user_input = input().capitalize()
+        if user_input == 'N':
+            PlayerController.new_player()
+            return PlayerController.option_choice()
+        elif user_input == 'A':
+            player_list = PlayerController.sorting_alphabetical(Player.get_all_players())
+            PlayerView.display_player_list(player_list)
+            PlayerController.wait_input()
+            PlayerController.option_choice()
+        elif user_input == 'D':
+            player_list = PlayerController.sorting_default(Player.get_all_players())
+            PlayerView.display_player_list(player_list)
+            PlayerController.wait_input()
+            PlayerController.option_choice()
+        elif user_input == 'R':
+            player_list = PlayerController.sorting_rank(Player.get_all_players())
+            PlayerView.display_player_list(player_list)
+            PlayerController.wait_input()
+            PlayerController.option_choice()
+        elif user_input == "B":
+            pass
+        elif user_input == "Q":
+            return
+        else:
+            print('Invalid Input')
+            PlayerController.option_choice()
 
-        loop = True
+    @staticmethod
+    def sorting_default(list_players):
+        list_players.sort(key=attrgetter("id"))
+        return list_players
 
-        while loop:
-            choice = main_menu[TerminalMenu(main_menu, title="player menu").show()]
+    @staticmethod
+    def sorting_alphabetical(list_players: list[Player]):
+        list_players.sort(key=attrgetter("last_name", "first_name",
+                                         "current_rank", "id"))
+        return list_players
 
-            if choice == "[a] Add Player":
-                self.prompt_for_new_player()
+    @staticmethod
+    def sorting_rank(list_players: list[Player]):
+        list_players.sort(key=attrgetter("current_rank"), reverse=True)
+        return list_players
 
-            elif choice == "[b] Create List of Player":
-                sub_loop = True
-                while sub_loop:
-                    choice = sub_menu[TerminalMenu(sub_menu, title="Player Sub menu").show()]
+    @staticmethod
+    def add_first_name():
+        valid_first_name = False
+        while not valid_first_name:
+            input_first_name = input("First name : ").capitalize()
+            if input_first_name != "":
+                valid_first_name = True
+            else:
+                print("A valid first name is required")
+        return input_first_name
 
-                    if choice == "[a] Alphabetical":
-                        print(choice)
+    @staticmethod
+    def add_last_name():
+        valid_last_name = False
+        while not valid_last_name:
+            input_last_name = input("Last name : ").capitalize()
+            if input_last_name != "":
+                valid_last_name = True
+            else:
+                print("A valid last name is required")
+        return input_last_name
 
-                    elif choice == "[b] Ranking":
-                        print(choice)
+    @staticmethod
+    def add_date_birth():
+        valid_birthdate = False
+        while not valid_birthdate:
+            input_date_birth = input("Date of birth (yyyy.mm.dd) : ")
+            number = re.findall("[0-9]+", input_date_birth)
+            if len(number) == 3:
+                if \
+                        len(number[0]) == 4 \
+                                and int(number[0]) >= 1900 \
+                                and 0 < int(number[1]) < 13 \
+                                and 0 < len(number[1]) < 3 \
+                                and 0 < int(number[2]) < 32 \
+                                and 0 < len(number[2]) < 3:
+                    if len(number[1]) == 1:
+                        number[1] = str(0) + number[1]
+                    if number[1] == "02":
+                        if int(number[1]) > 29:
+                            return "true"
+                    if len(number[2]) == 1:
+                        number[2] = str(0) + number[2]
+                    valid_birthdate = True
+                else:
+                    print("A valid birthdate is required")
+            else:
+                print("A valid birthdate is required")
+        return input_date_birth
 
-                    elif choice == "[c] go back":
-                        sub_loop = False
 
-            elif choice == "[q] quit":
-                loop = False
+    @staticmethod
+    def add_gender():
+        valid_gender = False
+        while not valid_gender:
+            input_gender = input("Gender (m/f) : ").capitalize()
+            if input_gender == "M" or input_gender == "F":
+                valid_gender = True
+            else:
+                print("A valid gender is required")
+        return input_gender
 
+    @staticmethod
+    def add_current_rank():
+        valid_rank = False
+        while not valid_rank:
+            input_current_rank = input("Current Rank : ")
+            number = re.findall("[0-9]+", input_current_rank)
+            if len(number) == 1:
+                if 0 < int(number[0]) < 3000:
+                    valid_rank = True
+            else:
+                print("A valid rank is required")
+        return int(input_current_rank)
 
-class PlayerController:
-    def __init__(self, player, view):
-        # Model
-        self.players = []
-        self.player = player
-        # View
-        self.view = view
+    @staticmethod
+    def new_player():
 
-    def add_player(self, first_name, last_name, date_of_birth, sex, rating):
-        self.players.append(Player(first_name, last_name, date_of_birth, sex, rating))
+        new_player = []
 
-    def create_players_list_alphabetical(self):
-        return sorted(self.players, key=Player.name)
-
-    def create_players_list_ranking(self):
-        return sorted(self.players, key=Player.rating())
-
-
+        new_player.append(PlayerController.add_first_name())
+        new_player.append(PlayerController.add_last_name())
+        new_player.append(PlayerController.add_date_birth())
+        new_player.append(PlayerController.add_gender())
+        new_player.append(PlayerController.add_current_rank())
+        return Player.add_player(new_player[0], new_player[1], new_player[2], new_player[3], new_player[4])
