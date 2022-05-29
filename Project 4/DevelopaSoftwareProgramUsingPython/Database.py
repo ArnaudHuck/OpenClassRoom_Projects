@@ -4,9 +4,9 @@ from tinydb import TinyDB, where, Query
 class DataBaseController:
     db = TinyDB("db.json")
     player_db = db.table("Players")
-
-    def __init__(self):
-        self.players = []
+    tournament_db = db.table("Tournament")
+    round_db = db.table("Rounds")
+    match_db = db.table("Matches")
 
     @staticmethod
     def get_len_players_in_db():
@@ -21,20 +21,32 @@ class DataBaseController:
         DataBaseController.player_db.insert(new_player)
 
     @staticmethod
-    def clean_database():
+    def clean_player_database():
         DataBaseController.player_db.truncate()
 
     @staticmethod
-    def get_player(player_first_name, player_last_name, player_birthdate):
-        for player in DataBaseController.list_player():
-            if player.__getitem__('first_name') == player_first_name \
-                    and player.__getitem__('last_name') == player_last_name \
-                    and player.__getitem__('date_of_birth') == player_birthdate:
-                return player
-        else:
-            print('No match')
+    def list_tournament() -> list[dict]:
+        return DataBaseController.tournament_db.all()
 
+    @staticmethod
+    def get_len_tournament_in_db():
+        return len(DataBaseController.tournament_db)
 
+    @staticmethod
+    def add_tournament(new_tournament):
+        DataBaseController.tournament_db.insert(new_tournament)
+
+    @staticmethod
+    def clean_tournament_database():
+        DataBaseController.tournament_db.truncate()
+
+    @staticmethod
+    def clean_round_database():
+        DataBaseController.round_db.truncate()
+
+    @staticmethod
+    def add_round_in_db(new_round):
+        DataBaseController.round_db.insert(new_round)
 
 
 

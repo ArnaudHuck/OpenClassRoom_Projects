@@ -1,99 +1,46 @@
-import operator
-import datetime
-from dataclasses import dataclass
+import Database
+import Player_model
+import Player_view
+import Player_controller
+import Tournament_controller
+import Tournament_model
+import Round_model
+
+# ('faustine', 'Boudin', '1984.12.06', 'F', 2200)
+# ('Henry', 'Huck', '1992.08.04', 'M', 2500)
+# ('Alice', 'Charles', '1994.12.07', 'F', 2900)
+# ('Gregoris', 'Lassale', '1978.11.18', 'H', 1800)
+# ('Philippe', 'Pitou', '1997.10.05', 'H', 1600)
+# ('Sabine', 'Foo', '1990.05.12', 'F', 2100)
+# ('Benoit', 'Benithon', '1993.08.10', 'H', 2600)
+# ('Olivier', 'Dubois', '1979.03.06', 'H', 1900)
+
+# Player_model.Player.add_player('Sabine', 'Foo', '1990.05.12', 'F', 2100)
+# print(Database.DataBaseController.get_len_players_in_db())
+# All_players = Player_model.Player.get_all_players()
+# A = (Player_model.DataBaseController.list_player())
+# B = Database.DataBaseController.get_player('Henry', 'Huck', '1992.08.04')
+# print(A)
+# print(B)
+# Database.DataBaseController.clean_tournament_database()
+
+# Player_controller.PlayerController.option_choice()
 
 
-@dataclass
-class Player:
-    first_name : str
-    last_name : str
-    date_of_birth : datetime
-    sex : str
-    rating : int
+# print(Player_model.Player.get_all_players())
+# Tournament_controller.TournamentController.add_tournament_participant_list()
+# Tournament_controller.TournamentController.option_choice()
+# Tournament_controller.TournamentController.add_new_tournament()
+# Tournament_model.Tournament.get_all_tournaments()
 
-    def __str__(self):
-        return f'{self.first_name}{self.last_name}({self.rating})'
+# print(Player_model.Player.deserialize(({'id': 1, 'first_name': 'faustine', 'last_name': 'Boudin', 'date_of_birth': '1984.12.06', 'gender': 'F', 'current_rank': 2200})))
+# print(Database.DataBaseController.list_tournament())
+# Database.DataBaseController.clean_tournament_database()
 
+# print(Tournament_controller.TournamentController.sort_list_of_player_in_tournament_alphabetically(1))
 
-class Tournament:
-    def __init__(self, name, venue, date, rounds, players, time_control, description,  number_of_rounds=4):
-        self.name = name
-        self.venue = venue
-        self.date = date
-        self.rounds = rounds
-        self.players = players
-        self.time_control = time_control
-        self.description = description
-        self.number_of_rounds = number_of_rounds
+# Round_model.Round.run("", Tournament_controller.StartTournament.sort_players_first_tour(Tournament_model.Tournament.get_tournament(1)),
+#                      Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)))
 
-
-class Round:
-    def __init__(self):
-        self.list_of_match = []
-
-
-class Match:
-    def __init__(self, pair_of_players):
-        self.pair_of_player =
-
-
-class View:
-    def prompt_for_new_player(self):
-        player_first_name = input("Type player first name: ")
-        player_last_name = input("Type player last name: ")
-        player_date_of_birth = input("Type player date of birth: ")
-        player_gender = input("Type player gender M/F: ")
-        player_rating = input("Type name of the player [1:8]: ")
-        new_player = [player_first_name, player_last_name, player_date_of_birth, player_gender, player_rating]
-        if new_player == "":
-            return None
-        return new_player
-
-
-class GameController:
-    def __init__(self, tournament, view, game_evaluator):
-        # Model
-        self.players = []
-        self.tournament = tournament
-        # View
-        self.view = view
-
-        # Controller
-        self.game_evaluator = game_evaluator
-
-    def create_tournament(self):
-        pass
-
-    def add_player(self, first_name, last_name, date_of_birth, sex, rating):
-        self.players.append(Player(first_name, last_name, date_of_birth, sex, rating))
-
-    def sort_player_by_rank(self):
-        ranking_list = []
-        for player in self.players:
-            ranking_list.append([player[0], player[4]])
-            ranking_list.sort(key=operator.itemgetter('rating'))
-            middle_index = len(ranking_list)//2
-            upper_ranks = ranking_list[:middle_index]
-            lower_ranks = ranking_list[middle_index:]
-            return upper_ranks, lower_ranks
-
-    def run(self):
-        while len(self.players) != 8:
-            new_player = self.view.prompt_for_new_player()
-            if new_player is None and len(self.players) != 8:
-                break
-            self.add_player(new_player)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Tournament_controller.StartTournament.sort_players_second_tour(Tournament_model.Tournament.get_tournament(1))
+# print(Tournament_controller.StartTournament.sort_players_first_tour(Tournament_model.Tournament.get_tournament(1)))

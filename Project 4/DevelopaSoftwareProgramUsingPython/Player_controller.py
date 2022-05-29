@@ -103,7 +103,6 @@ class PlayerController(BaseController):
                 print("A valid birthdate is required")
         return input_date_birth
 
-
     @staticmethod
     def add_gender():
         valid_gender = False
