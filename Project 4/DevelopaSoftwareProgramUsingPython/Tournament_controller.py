@@ -234,22 +234,35 @@ class StartTournament:
         self.sorted_players = []
 
         self.round = Round()
-        self.tournament_object = Tournament.deserialize_tournament(Tournament.get_tournament(id))
-        self.sorted_players = self.sort_players_first_tour(self.tournament_object)
+        self.tournament = Tournament.get_tournament(int(input("Enter the tournament id you wish to start: ")))
+        self.tournament_object = Tournament.deserialize_tournament(self.tournament)
+        self.sorted_players = self.sort_players_first_tour(self.tournament)
         self.tournament_object.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament_object))
+        print(self.tournament_object)
         self.save_tournament_statement(self.tournament_object)
+        print(self.tournament_object.serialize())
 
         for tour in range(int(self.tournament_object.number_of_rounds) - 1):
             self.sorted_players.clear()
-            self.sorted_players = self.sort_players_second_tour((self.tournament_object.list_of_rounds[round]))
+            self.sorted_players = self.sort_players_next_tours(self.tournament_object.list_of_rounds[0])
+            self.tournament_object.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament_object))
+            self.save_tournament_statement(self.tournament_object)
 
     @staticmethod
     def save_tournament_statement(tournament_object):
 
-        round_object = Tournament.deserialize_tournament(tournament_object).list_of_rounds[-1]
-        round_serialized = round_object.serialized()
-        round_serialized['list_of_finished_matches'] = round_object.list_of_finished_matchs
-        round_id = Round.add_round("", round_object.list_of_finished_matchs)
+        # sauvegarder une liste de round dans le tournoi
+        # Prendre un objet tournoi, prendre un dict key id player score : inclure dans l'objet tournoi dans la participant list les score des joueurs : renvoyer
+        # effacer table round
+        # vérifier variables
+        # fonction qui prend un tournoi_object, qui parcours la liste de round et qui retourne un dict avec key: player_id, player_score
+
+        round_object = tournament_object.list_of_rounds[-1]
+        round_serialized = Round.serialize(round_object)
+        round_serialized['name'] = round_object.name
+        round_serialized['list_of_finished_matches'] = round_object.list_of_finished_matches
+        Round.add_round_to_tournament(round_object.name, round_serialized)
+        round_id = StartTournament.ROUNDS_PLAYED.append(round_serialized)
         StartTournament.ROUNDS_PLAYED.append(round_id)
 
     @staticmethod
@@ -276,31 +289,31 @@ class StartTournament:
                 pass
 
         return sorted_players
-#       return [Player.serialize(player) for player in sorted_players]
 
     @staticmethod
-    def sort_players_second_tour(round_instance):
-        player = Player()
+    def sort_players_next_tours(round_instance:  [Round]):
         players = []
-        players_sorted_by_score = []
         players_sorted_flat = []
         players_instance = []
         match_to_try = set()
 
-        for match in Round.deserialize_round(round_instance).list_of_rounds:
-            print(match)
+        for match in round_instance.list_of_finished_matches:
             for player in match:
                 players.append(player)
 
-        players_sorted_by_score = copy.copy(players)
+        players_sorted_by_score = players.copy()
 
         for player in players_sorted_by_score:
             players_sorted_flat.append(player[0])
 
         players_sorted_by_score.clear()
 
+        for player_id in players_sorted_flat:
+            player = Player.get_player(player_id)
+            players_instance.append(Player.deserialize(player))
+
         # Sort players by score, if score are equals, sort by rank.
-        players_instance.sort(key=attrgetter("tournament_score", 'ranking'), reverse=True)
+        players_instance.sort(key=attrgetter("tournament_score", 'current_rank'), reverse=True)
 
         for player_1 in players_instance:
 
@@ -312,13 +325,12 @@ class StartTournament:
                 except Exception:
                     break
 
-            match_to_try.add(player_1.player_id)
-            match_to_try.add(player_2.player_id)
+            match_to_try.add(player_1.id)
+            match_to_try.add(player_2.id)
 
-            while match_to_try in StartTournament.MATCH_PLAYED:  # compare match_to_try with matchs already played
-                print(f"Le match {player_1} CONTRE {player_2} a déjà eu lieu")
-                time.sleep(1)
-                match_to_try.remove(player_2.player_id)
+            while match_to_try in StartTournament.MATCH_PLAYED:  # compare match_to_try with matches already played
+                print(f"The match {Player.serialize(player_1)} versus {Player.serialize(player_2)} already took place")
+                match_to_try.remove(player_2.id)
                 try:
                     player_2 = players_instance[players_instance.index(player_2) + 1]
                 except Exception:
@@ -327,12 +339,12 @@ class StartTournament:
                 continue
 
             else:
-                print(f"Ajout du match {player_1} CONTRE {player_2}")
+                print(f"Adding match {Player.serialize(player_1)} versus {Player.serialize(player_2)}")
                 players_sorted_by_score.append(player_1)
                 players_sorted_by_score.append(player_2)
                 players_instance.pop(players_instance.index(player_2))
-                StartTournament.MATCH_PLAYED.append({player_1.player_id, player_2.player_id})
+                StartTournament.MATCH_PLAYED.append({player_1.id, player_2.id})
                 match_to_try.clear()
-                time.sleep(1)
 
         return players_sorted_by_score
+#        return [Player.serialize(player) for player in players_sorted_by_score]

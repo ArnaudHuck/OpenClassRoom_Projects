@@ -10,6 +10,8 @@ class Tournament:
     def __init__(self, id=int(), name="", venue="", date="", number_of_rounds=4,
                  time_control=list, description="", list_of_rounds=list[Round], participant_list=list[Player]):
 
+        if list_of_rounds is None:
+            list_of_rounds = []
         self.id = id
         self.name = name
         self.venue = venue
@@ -19,27 +21,6 @@ class Tournament:
         self.description = description
         self.list_of_rounds = list_of_rounds
         self.participant_list = participant_list
-
-    @staticmethod
-    def deserialize_tournament_in_progress(in_progress: dict) -> 'Tournament':
-        id = in_progress["id"]
-        name = in_progress["name"]
-        venue = in_progress["venue"]
-        date = in_progress["date"]
-        number_of_rounds = in_progress["number_of_rounds"]
-        time_control = in_progress["time_control"]
-        description = in_progress["description"]
-        list_of_rounds = in_progress["list_of_rounds"]
-        participant_list = in_progress["participant_list"]
-        return Tournament(id,
-                          name,
-                          venue,
-                          date,
-                          number_of_rounds,
-                          time_control,
-                          description,
-                          list_of_rounds,
-                          participant_list)
 
     @staticmethod
     def deserialize_tournament(serialized_tournament: dict) -> 'Tournament':
@@ -88,7 +69,7 @@ class Tournament:
     def add_tournament(name, venue, date, number_of_rounds, time_control, description,
                        participant_list=list[Player]):
         id = DataBaseController.get_len_tournament_in_db() + 1
-        list_of_rounds = None
+        list_of_rounds = []
         new_tournament = Tournament(id,
                                     name,
                                     venue,

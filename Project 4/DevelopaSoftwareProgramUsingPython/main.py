@@ -26,7 +26,6 @@ import Round_model
 
 # Player_controller.PlayerController.option_choice()
 
-
 # print(Player_model.Player.get_all_players())
 # Tournament_controller.TournamentController.add_tournament_participant_list()
 # Tournament_controller.TournamentController.option_choice()
@@ -39,8 +38,26 @@ import Round_model
 
 # print(Tournament_controller.TournamentController.sort_list_of_player_in_tournament_alphabetically(1))
 
-# Round_model.Round.run("", Tournament_controller.StartTournament.sort_players_first_tour(Tournament_model.Tournament.get_tournament(1)),
-#                      Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)))
+# Tournament_controller.StartTournament.sort_players_second_tour(Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)).list_of_rounds)
 
-Tournament_controller.StartTournament.sort_players_second_tour(Tournament_model.Tournament.get_tournament(1))
 # print(Tournament_controller.StartTournament.sort_players_first_tour(Tournament_model.Tournament.get_tournament(1)))
+
+# print(Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)).list_of_rounds)
+
+# tournament = Tournament_controller.StartTournament()
+# tournament()
+
+
+# round = Round_model.Round()
+# finished_first_round = (round.run(Tournament_controller.StartTournament.sort_players_first_tour(Tournament_model.Tournament.get_tournament(1)), Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1))))
+# print(Round_model.Round.serialize(finished_first_round))
+
+# second_round = Tournament_controller.StartTournament.sort_players_next_tours(finished_first_round)
+# print(second_round)
+
+tournament = Tournament_controller.StartTournament()
+tournament()
+
+# print(Tournament_model.Tournament.get_tournament(1))
+
+# Database.DataBaseController.clean_round_database()
