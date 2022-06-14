@@ -160,7 +160,7 @@ class TournamentController(BaseController):
         return description
 
     @staticmethod
-    def add_tournament_participant_list() -> list[dict]:
+    def add_tournament_participant_list() -> list[Player]:
         all_participant = []
         choice = input("Do you wish to add a new player ?  Y/N: ")
         if choice == "Y":
@@ -186,23 +186,21 @@ class TournamentController(BaseController):
             return
         else:
             print("Input Y or N")
-        return all_participant
+        return [Player.deserialize(participant) for participant in all_participant]
 
     @staticmethod
     def sort_list_of_player_in_tournament_alphabetically(user_input) -> [list[Player]]:
         tournament = Tournament.get_tournament(int(user_input))
-        tournament_object = Tournament.deserialize_tournament(tournament)
-        list_player = tournament_object.__getattribute__('participant_list')
+        list_player = tournament.participant_list
         new_list = sorted(list_player, key=itemgetter('first_name'))
         return new_list
 
     @staticmethod
-    def sort_list_of_player_in_tournament_ranking(user_input) -> [list[Player]]:
+    def sort_list_of_player_in_tournament_ranking(user_input) -> list[Player]:
         tournament = Tournament.get_tournament(int(user_input))
-        tournament_object = Tournament.deserialize_tournament(tournament)
-        list_player = tournament_object.__getattribute__('participant_list')
+        list_player = tournament.participant_list
         new_list = sorted(list_player, key=itemgetter('current_rank'), reverse=True)
-        return new_list
+        return [Player.deserialize(player) for player in new_list]
 
     @staticmethod
     def sorting_default(list_players):
@@ -227,26 +225,23 @@ class TournamentController(BaseController):
 
 class StartTournament:
 
-    MATCH_PLAYED = []
-    ROUNDS_PLAYED = []
+    MATCH_PLAYED: dict[int: int] = []
+    ROUNDS_PLAYED: list[Round] = []
 
     def __call__(self):
         self.sorted_players = []
 
         self.round = Round()
         self.tournament = Tournament.get_tournament(int(input("Enter the tournament id you wish to start: ")))
-        self.tournament_object = Tournament.deserialize_tournament(self.tournament)
         self.sorted_players = self.sort_players_first_tour(self.tournament)
-        self.tournament_object.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament_object))
-        print(self.tournament_object)
-        self.save_tournament_statement(self.tournament_object)
-        print(self.tournament_object.serialize())
+        self.tournament.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament))
+        self.save_tournament_statement(self.tournament)
 
-        for tour in range(int(self.tournament_object.number_of_rounds) - 1):
+        for tour in range(int(self.tournament.number_of_rounds) - 1):
             self.sorted_players.clear()
-            self.sorted_players = self.sort_players_next_tours(self.tournament_object.list_of_rounds[0])
-            self.tournament_object.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament_object))
-            self.save_tournament_statement(self.tournament_object)
+            self.sorted_players = self.sort_players_next_tours(self.tournament.list_of_rounds[0])
+            self.tournament.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament))
+            self.save_tournament_statement(self.tournament)
 
     @staticmethod
     def save_tournament_statement(tournament_object):
@@ -268,19 +263,18 @@ class StartTournament:
     @staticmethod
     def sort_players_first_tour(tournament: [Tournament]):
 
-        sorted_players = []
-        players_instances = []
+        sorted_players: list[Player] = []
+        players_instances: list[Player] = []
 
-        for serialized_player in TournamentController.sort_list_of_player_in_tournament_ranking(Tournament.deserialize_tournament(tournament).id):
-            player = Player.deserialize(serialized_player)
+        for player in TournamentController.sort_list_of_player_in_tournament_ranking(tournament.id):
             players_instances.append(player)
 
         for player in players_instances:
             player_1 = player
             index_player_1 = players_instances.index(player)
 
-            if index_player_1 + len(Tournament.deserialize_tournament(tournament).participant_list) / 2 < len(Tournament.deserialize_tournament(tournament).participant_list):
-                index_player_2 = index_player_1 + int(len(Tournament.deserialize_tournament(tournament).participant_list) / 2)
+            if index_player_1 + len(tournament.participant_list) / 2 < len(tournament.participant_list):
+                index_player_2 = index_player_1 + int(len(tournament.participant_list) / 2)
                 player_2 = players_instances[index_player_2]
                 sorted_players.append(player_1)
                 sorted_players.append(player_2)
@@ -310,7 +304,7 @@ class StartTournament:
 
         for player_id in players_sorted_flat:
             player = Player.get_player(player_id)
-            players_instance.append(Player.deserialize(player))
+            players_instance.append(player)
 
         # Sort players by score, if score are equals, sort by rank.
         players_instance.sort(key=attrgetter("tournament_score", 'current_rank'), reverse=True)
@@ -339,7 +333,7 @@ class StartTournament:
                 continue
 
             else:
-                print(f"Adding match {Player.serialize(player_1)} versus {Player.serialize(player_2)}")
+                print(f"Adding match {player_1} versus {player_2}")
                 players_sorted_by_score.append(player_1)
                 players_sorted_by_score.append(player_2)
                 players_instance.pop(players_instance.index(player_2))

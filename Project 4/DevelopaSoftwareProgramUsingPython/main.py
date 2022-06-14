@@ -6,7 +6,7 @@ import Tournament_controller
 import Tournament_model
 import Round_model
 
-# ('faustine', 'Boudin', '1984.12.06', 'F', 2200)
+# ('Faustine', 'Boudin', '1984.12.06', 'F', 2200)
 # ('Henry', 'Huck', '1992.08.04', 'M', 2500)
 # ('Alice', 'Charles', '1994.12.07', 'F', 2900)
 # ('Gregoris', 'Lassale', '1978.11.18', 'H', 1800)
@@ -15,14 +15,15 @@ import Round_model
 # ('Benoit', 'Benithon', '1993.08.10', 'H', 2600)
 # ('Olivier', 'Dubois', '1979.03.06', 'H', 1900)
 
-# Player_model.Player.add_player('Sabine', 'Foo', '1990.05.12', 'F', 2100)
+# Player_model.Player.add_player('Olivier', 'Dubois', '1979.03.06', 'H', 1900)
 # print(Database.DataBaseController.get_len_players_in_db())
 # All_players = Player_model.Player.get_all_players()
 # A = (Player_model.DataBaseController.list_player())
-# B = Database.DataBaseController.get_player('Henry', 'Huck', '1992.08.04')
+# B = Player_model.Player.get_player(1)
 # print(A)
 # print(B)
 # Database.DataBaseController.clean_tournament_database()
+# Database.DataBaseController.clean_player_database()
 
 # Player_controller.PlayerController.option_choice()
 
@@ -36,7 +37,7 @@ import Round_model
 # print(Database.DataBaseController.list_tournament())
 # Database.DataBaseController.clean_tournament_database()
 
-# print(Tournament_controller.TournamentController.sort_list_of_player_in_tournament_alphabetically(1))
+# print(Tournament_controller.TournamentController.sort_list_of_player_in_tournament_ranking(1))
 
 # Tournament_controller.StartTournament.sort_players_second_tour(Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)).list_of_rounds)
 
@@ -44,8 +45,8 @@ import Round_model
 
 # print(Tournament_model.Tournament.deserialize_tournament(Tournament_model.Tournament.get_tournament(1)).list_of_rounds)
 
-# tournament = Tournament_controller.StartTournament()
-# tournament()
+tournament = Tournament_controller.StartTournament()
+tournament()
 
 
 # round = Round_model.Round()
@@ -55,8 +56,8 @@ import Round_model
 # second_round = Tournament_controller.StartTournament.sort_players_next_tours(finished_first_round)
 # print(second_round)
 
-tournament = Tournament_controller.StartTournament()
-tournament()
+# tournament = Tournament_controller.StartTournament()
+# tournament()
 
 # print(Tournament_model.Tournament.get_tournament(1))
 

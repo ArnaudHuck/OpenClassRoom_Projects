@@ -19,7 +19,7 @@ class TournamentView:
     @staticmethod
     def display_tournament_list(tournaments: list[Tournament]):
         for tournament in tournaments:
-            print(tournament.serialize(), "\n")
+            print(tournament, "\n")
 
     @staticmethod
     def display_tournament_time_control_options():
