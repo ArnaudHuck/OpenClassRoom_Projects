@@ -1,15 +1,21 @@
+import sys
+
+from Main_view import MainView
 from Player_controller import PlayerController
+from Tournament_controller import TournamentController
 
 
 class MainController:
 
-    def __init__(self):
+    @staticmethod
+    def home_menu():
+        MainView.home_menu_view()
+        choice = input("Which menu do you wish to select ?: ")
+        if choice == "P":
+            PlayerController.option_choice()
+        if choice == "T":
+            TournamentController.option_choice()
+        if choice == "Q":
+            sys.exit()
 
-        self.player_controller = PlayerController(self)
 
-    def get_unserial_list_players(self):
-        return self.player_controller.get_unserial_list_of_player()
-
-    def get_unserial_players_participants(self, players_participants_in_db):
-        return self.player_controller \
-            .get_unserial_players_participants(players_participants_in_db)

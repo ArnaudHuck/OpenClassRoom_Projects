@@ -1,8 +1,13 @@
+import sys
+
 from basecontroller import BaseController
 from operator import attrgetter
 import re
 from Player_model import Player
 from Player_view import PlayerView
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from Main_Controller import MainController
 
 
 class PlayerController(BaseController):
@@ -30,9 +35,9 @@ class PlayerController(BaseController):
             PlayerController.wait_input()
             PlayerController.option_choice()
         elif user_input == "B":
-            pass
+            MainController.home_menu()
         elif user_input == "Q":
-            return
+            sys.exit()
         else:
             print('Invalid Input')
             PlayerController.option_choice()
