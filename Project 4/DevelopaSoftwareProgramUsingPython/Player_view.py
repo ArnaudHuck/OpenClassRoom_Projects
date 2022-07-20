@@ -18,6 +18,3 @@ class PlayerView:
         for player in players:
             print(player.serialize(), "\n")
 
-
-
-

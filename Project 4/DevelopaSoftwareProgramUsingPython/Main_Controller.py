@@ -17,5 +17,3 @@ class MainController:
             TournamentController.option_choice()
         if choice == "Q":
             sys.exit()
-
-

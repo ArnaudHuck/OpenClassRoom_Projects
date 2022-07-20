@@ -33,7 +33,8 @@ class Tournament:
         time_control = serialized_tournament["time_control"]
         description = serialized_tournament["description"]
         list_of_rounds = [Round.deserialize_round(round_dict) for round_dict in serialized_tournament["list_of_rounds"]]
-        participant_list = [Player.deserialize(player_dict) for player_dict in serialized_tournament["participant_list"]]
+        participant_list = [Player.deserialize(player_dict) for player_dict in
+                            serialized_tournament["participant_list"]]
         participant_score = serialized_tournament["participant_score"]
         return Tournament(id,
                           name,
@@ -99,8 +100,15 @@ class Tournament:
         if len(tournament.list_of_rounds) == 1:
             DataBaseController.tournament_in_progress_or_ended_db.insert(tournament.serialize())
         else:
-            DataBaseController.tournament_in_progress_or_ended_db.upsert({"list_of_rounds": [Round.serialize(round) for round in tournament.list_of_rounds]},
+            DataBaseController.tournament_in_progress_or_ended_db.upsert({"list_of_rounds": [Round.serialize(round)
+                                                                          for round in tournament.list_of_rounds]},
                                                                          where("id") == tournament.id)
+
+    @staticmethod
+    def save_participant_score(tournament: 'Tournament'):
+        DataBaseController.tournament_in_progress_or_ended_db.update({'participant_score':
+                                                                      tournament.participant_score},
+                                                                     where("id") == tournament.id)
 
     @staticmethod
     def get_all_tournaments_unfinished_or_ended() -> list['Tournament']:

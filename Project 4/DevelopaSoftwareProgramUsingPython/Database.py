@@ -1,26 +1,21 @@
-from tinydb import TinyDB, table, where, Query
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from Tournament_model import Tournament
-    from Round_model import Round
+from tinydb import TinyDB
 
 
 class DataBaseController:
     db = TinyDB("db.json")
     player_db = db.table("Players")
     tournament_db = db.table("Tournament")
-    tournament_in_progress_or_ended_db = db.table(("Tournament in progress or ended"))
+    tournament_in_progress_or_ended_db = db.table("Tournament in progress or ended")
     round_db = db.table("Rounds")
     match_db = db.table("Matches")
 
     @staticmethod
     def get_tournament(tournament_id: int) -> dict:
-        return DataBaseController.tournament_db.get(doc_id=tournament_id)
+        return DataBaseController.tournament_db.get(doc_id=tournament_id)  # type: ignore
 
     @staticmethod
     def get_unfinished_tournament(tournament_id: int) -> dict:
-        return DataBaseController.tournament_in_progress_or_ended_db.get(doc_id=tournament_id)
-
+        return DataBaseController.tournament_in_progress_or_ended_db.get(doc_id=tournament_id)  # type: ignore
 
     @staticmethod
     def get_len_players_in_db():
@@ -28,7 +23,7 @@ class DataBaseController:
 
     @staticmethod
     def list_player() -> list[dict]:
-        return DataBaseController.player_db.all()
+        return DataBaseController.player_db.all()  # type: ignore
 
     @staticmethod
     def add_player(new_player):
@@ -40,7 +35,7 @@ class DataBaseController:
 
     @staticmethod
     def list_tournament() -> list[dict]:
-        return DataBaseController.tournament_db.all()
+        return DataBaseController.tournament_db.all()  # type: ignore
 
     @staticmethod
     def get_len_tournament_in_db():
@@ -63,15 +58,9 @@ class DataBaseController:
         DataBaseController.round_db.truncate()
 
     @staticmethod
-    def add_round_in_db(new_round):
-        DataBaseController.round_db.insert(new_round)
-
-    @staticmethod
     def add_tournament_in_progress(new_tournament):
         DataBaseController.tournament_in_progress_or_ended_db.insert(new_tournament)
 
     @staticmethod
     def clean_tournament_in_progress_database():
         DataBaseController.tournament_in_progress_or_ended_db.truncate()
-
-

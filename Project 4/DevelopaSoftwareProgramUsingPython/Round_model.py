@@ -1,6 +1,5 @@
 from Match_model import Match
 from Player_model import Player
-from Database import DataBaseController
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from Tournament_model import Tournament
@@ -34,7 +33,7 @@ class Round:
         matches: list[Match] = []
 
         while len(sorted_player_list) > 0:
-            match = Match(self.name, sorted_player_list[0], sorted_player_list[1])
+            match = Match(self.name, sorted_player_list[0], sorted_player_list[1], 0, 0)
             Match.MATCH_NUMBER += 1
             matches.append(match)
             del sorted_player_list[0:2]
@@ -49,22 +48,17 @@ class Round:
                 score_player_2 = 1
                 match.score_player_2 = score_player_2
             if match_result == 3:
-                score_player_1 = 0.5
-                score_player_2 = 0.5
+                score_player_1 = 0.5  # type: ignore
+                score_player_2 = 0.5  # type: ignore
                 match.score_player_1 = score_player_1
                 match.score_player_2 = score_player_2
 
-            tournament.participant_score[match.player_1.id] = tournament.participant_score.get(match.player_1.id, 0) + match.score_player_1
+            tournament.participant_score[match.player_1.id] = tournament.participant_score.get(match.player_1.id,
+                                                                                               0) + match.score_player_1
             tournament.participant_score[match.player_2.id] = tournament.participant_score.get(match.player_2.id,
                                                                                                0) + match.score_player_2
-        return Round(Round.make(tournament).name, matches)
 
-    @staticmethod
-    def add_round_to_tournament(name, list_of_finished_matches):
-        new_round = Round(name,
-                          list_of_finished_matches)
-        DataBaseController.add_round_in_db(new_round.serialize())
-        return new_round.serialize()
+        return Round(Round.make(tournament).name, matches)
 
     def __repr__(self):
         return f"{self.matches}"

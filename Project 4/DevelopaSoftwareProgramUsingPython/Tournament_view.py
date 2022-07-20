@@ -1,5 +1,4 @@
 from Tournament_model import Tournament
-from Player_model import Player
 from Round_model import Round
 
 
@@ -40,5 +39,4 @@ class TournamentView:
     def display_tournament_unfinished():
         for tournament in Tournament.get_all_tournaments_unfinished_or_ended():
             if len(tournament.list_of_rounds) < tournament.number_of_rounds:
-                print(tournament.id, tournament.name, tournament.date,"\n")
-
+                print(tournament.id, tournament.name, tournament.date, "\n")

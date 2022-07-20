@@ -88,12 +88,8 @@ class PlayerController(BaseController):
             number = re.findall("[0-9]+", input_date_birth)
             if len(number) == 3:
                 if \
-                        len(number[0]) == 4 \
-                                and int(number[0]) >= 1900 \
-                                and 0 < int(number[1]) < 13 \
-                                and 0 < len(number[1]) < 3 \
-                                and 0 < int(number[2]) < 32 \
-                                and 0 < len(number[2]) < 3:
+                        len(number[0]) == 4 and int(number[0]) >= 1900 and 0 < int(number[1]) < 13 \
+                        and 0 < len(number[1]) < 3 and 0 < int(number[2]) < 32 and 0 < len(number[2]) < 3:
                     if len(number[1]) == 1:
                         number[1] = str(0) + number[1]
                     if number[1] == "02":
