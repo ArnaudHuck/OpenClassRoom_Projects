@@ -25,6 +25,10 @@ class Tournament:
 
     @staticmethod
     def deserialize_tournament(serialized_tournament: dict) -> 'Tournament':
+        """
+        :param serialized_tournament:
+        :return:
+        """
         id = serialized_tournament['id']
         name = serialized_tournament["name"]
         venue = serialized_tournament["venue"]

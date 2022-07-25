@@ -22,8 +22,8 @@ class DataBaseController:
         return len(DataBaseController.player_db)
 
     @staticmethod
-    def list_player() -> list[dict]:
-        return DataBaseController.player_db.all()  # type: ignore
+    def list_player() -> list:
+        return DataBaseController.player_db.all()
 
     @staticmethod
     def add_player(new_player):
@@ -34,8 +34,8 @@ class DataBaseController:
         DataBaseController.player_db.truncate()
 
     @staticmethod
-    def list_tournament() -> list[dict]:
-        return DataBaseController.tournament_db.all()  # type: ignore
+    def list_tournament() -> list:
+        return DataBaseController.tournament_db.all()
 
     @staticmethod
     def get_len_tournament_in_db():

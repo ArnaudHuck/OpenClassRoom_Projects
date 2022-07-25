@@ -6,6 +6,8 @@ from Tournament_controller import TournamentController
 
 
 class MainController:
+    def __init__(self):
+        pass
 
     @staticmethod
     def home_menu():

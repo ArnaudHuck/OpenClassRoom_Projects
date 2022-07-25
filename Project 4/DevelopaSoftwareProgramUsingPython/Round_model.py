@@ -1,5 +1,6 @@
 from Match_model import Match
 from Player_model import Player
+from collections import Counter
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from Tournament_model import Tournament
@@ -31,6 +32,13 @@ class Round:
     def run(self, sorted_player_list: list[Player], tournament: 'Tournament'):
 
         matches: list[Match] = []
+        finished_rounds: list[dict] = [Round.serialize(round) for round in tournament.list_of_rounds]
+        finished_matches: list[Match] = [finished_round['list_of_finished_matches']
+                                  for finished_round in finished_rounds]
+
+        print(type(finished_matches))
+
+        Match.MATCH_NUMBER = len(finished_matches)
 
         while len(sorted_player_list) > 0:
             match = Match(self.name, sorted_player_list[0], sorted_player_list[1], 0, 0)
