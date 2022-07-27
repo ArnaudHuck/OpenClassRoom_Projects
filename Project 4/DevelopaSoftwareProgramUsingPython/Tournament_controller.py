@@ -18,6 +18,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def option_choice():
+        """
+        :return: Returns the entry matching the user's input
+        """
         TournamentView.display_options()
         user_input = input().capitalize()
         if user_input == "A":
@@ -64,6 +67,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_name():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_tournament_name = False
         while not valid_tournament_name:
             input_tournament_name = input("Tournament name: ").capitalize()
@@ -75,6 +81,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_venue():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_tournament_venue = False
         while not valid_tournament_venue:
             input_tournament_venue = input("Tournament venue: ")
@@ -86,6 +95,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_date():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_tournament_date = False
         while not valid_tournament_date:
             input_beginning_tournament_date = input("Tournament beginning date (yyyy.mm.dd): ")
@@ -125,6 +137,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_number_of_rounds():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         number_of_round = 4
         print("The number of round is set on 4 would you like to change it ? ")
 
@@ -143,6 +158,9 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_time_control():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         time_control = None
         TournamentView.display_tournament_time_control_options()
         user_input = input("Select the tournament time control: ")
@@ -156,11 +174,17 @@ class TournamentController(BaseController):
 
     @staticmethod
     def add_tournament_description():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         description = input("Enter the tournament description: ")
         return description
 
     @staticmethod
     def add_tournament_participant_list() -> Optional[list[Player]]:
+        """
+        :return: Returns the user's input after checking consistency
+        """
         all_participant: list[Player] = []
         choice = input("Do you wish to add a new player ?  Y/N: ")
         if choice == "Y":
@@ -189,6 +213,10 @@ class TournamentController(BaseController):
 
     @staticmethod
     def sort_list_of_player_in_tournament_alphabetically(user_input) -> list[Player]:
+        """
+        :param user_input: Takes the user input
+        :return: Returns the tournament participant list sorted by last name
+        """
         tournament = Tournament.get_tournament(int(user_input))
         list_player = tournament.participant_list
         new_list = sorted(list_player, key=lambda player: player.last_name)
@@ -196,18 +224,29 @@ class TournamentController(BaseController):
 
     @staticmethod
     def sort_list_of_player_in_tournament_ranking(user_input) -> list[Player]:
+        """
+        :param user_input: Takes the user input
+        :return: Returns the tournament participant list sorted by ranking
+        """
         tournament = Tournament.get_tournament(int(user_input))
         list_player = tournament.participant_list
         new_list = sorted(list_player, key=lambda player: player.current_rank, reverse=True)
         return new_list
 
     @staticmethod
-    def sorting_default(list_players):
+    def sorting_default(list_players) -> list[Player]:
+        """
+        :param list_players: Takes a list of players
+        :return: Returns the list sorted by id
+        """
         list_players.sort(key=attrgetter("id"))
         return list_players
 
     @staticmethod
     def add_new_tournament():
+        """
+        :return: Returns an object containing all previous inputs
+        """
 
         new_tournament = [TournamentController.add_tournament_name(), TournamentController.add_tournament_venue(),
                           TournamentController.add_tournament_date(),
@@ -225,6 +264,9 @@ class StartTournament:
     ROUNDS_PLAYED: list[Round] = []
 
     def __call__(self):
+        """
+        :return: Plays a tournament from the beginning
+        """
         self.sorted_players: list[Player] = []
 
         print(Tournament.get_all_tournaments())
@@ -252,6 +294,11 @@ class StartTournament:
 
     @staticmethod
     def has_match_been_not_played(test_match: set[int], list_of_finished_matches: list[Match]):
+        """
+        :param test_match: Takes a set
+        :param list_of_finished_matches: Takes a list of Match object
+        :return: Returns True if the set is in the match list, False if it is not
+        """
         for match in list_of_finished_matches:
             match_set = {match.player_1.id, match.player_2.id}
             if test_match == match_set:
@@ -262,6 +309,10 @@ class StartTournament:
 
     @staticmethod
     def sort_players_first_tour(tournament: Tournament):
+        """
+        :param tournament: Takes a tournament object
+        :return: Returns the tournament participant list sorted to play first round
+        """
 
         sorted_players: list[Player] = []
         players_instances: list[Player] = []
@@ -287,6 +338,10 @@ class StartTournament:
 
     @staticmethod
     def sort_players_next_tours(tournament: Tournament):
+        """
+        :param tournament: Takes a tournament object
+        :return: Returns the participant list sorted to play next round
+        """
 
         players_id_and_score: list[dict] = []
         players_instance: list[Player] = []
@@ -341,12 +396,19 @@ class StartTournament:
 
     @staticmethod
     def who_is_winner(participant_final_scores: dict[int, float]) -> str:
+        """
+        :param participant_final_scores: Takes a tournament participant score argument
+        :return: Returns the player with the highest score
+        """
 
         new_value = max(participant_final_scores, key=participant_final_scores.get)  # type: ignore
         return f'{Player.get_player(new_value)} is the big winner'
 
     @staticmethod
     def resume_tournament():
+        """
+        :return: Plays a tournament that has not been finished
+        """
 
         sorted_players = []
         TournamentView.display_tournament_unfinished()
@@ -384,6 +446,9 @@ class StartTournament:
 
     @staticmethod
     def leave_or_stay():
+        """
+        :return: Exit the software between two rounds
+        """
         print("Do you wish to leave the current tournament ?")
         valid_choice = False
         while not valid_choice:

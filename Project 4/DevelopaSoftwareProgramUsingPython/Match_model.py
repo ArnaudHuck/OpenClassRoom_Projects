@@ -16,6 +16,9 @@ class Match:
         return f"{self.player_1} --VS-- {self.player_2}"
 
     def serialize(self) -> dict:
+        """
+        :return: Returns a dict containing all match keu, value information
+        """
         return {"name": self.name,
                 "player_1": Player.serialize(self.player_1),
                 "player_2": Player.serialize(self.player_2),
@@ -24,6 +27,10 @@ class Match:
 
     @staticmethod
     def deserialize(serialized_match) -> 'Match':
+        """
+        :param serialized_match: Takes a dict containing all match key, value information
+        :return: Returns a round object
+        """
         name = serialized_match["name"]
         player_1 = Player.deserialize(serialized_match["player_1"])
         player_2 = Player.deserialize(serialized_match["player_2"])

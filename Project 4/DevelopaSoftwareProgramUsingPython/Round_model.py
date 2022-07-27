@@ -15,21 +15,37 @@ class Round:
 
     @staticmethod
     def make(tournament: 'Tournament') -> 'Round':
+        """
+        :param tournament: Takes a tournament object
+        :return: Returns a round object
+        """
         name = "Round " + str(len(tournament.list_of_rounds) + 1)
         return Round(name=name, matches=[])
 
     def serialize(self) -> dict:
+        """
+        :return: Return a dict containing all round key, value information
+        """
         round_info = {'name': self.name, 'list_of_finished_matches': [Match.serialize(match) for match in self.matches]}
         return round_info
 
     @staticmethod
-    def deserialize_round(serialized_round: dict):
+    def deserialize_round(serialized_round: dict) -> 'Round':
+        """
+        :param serialized_round: Takes a dict with round key, value information
+        :return: Returns a round object
+        """
         name = serialized_round['name']
         list_of_finished_matches = [Match.deserialize(match) for match in serialized_round['list_of_finished_matches']]
         return Round(name,
                      list_of_finished_matches)
 
     def run(self, sorted_player_list: list[Player], tournament: 'Tournament'):
+        """
+        :param sorted_player_list: Takes a player list previously sorted
+        :param tournament: Takes a tournament object
+        :return: Returns a round with a list of finished matches and updates participant score
+        """
 
         matches: list[Match] = []
         finished_rounds: list[dict] = [Round.serialize(round) for round in tournament.list_of_rounds]

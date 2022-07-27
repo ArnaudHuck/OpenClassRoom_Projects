@@ -11,6 +11,9 @@ class MainController:
 
     @staticmethod
     def home_menu():
+        """
+        :return: Displays the home menu
+        """
         MainView.home_menu_view()
         choice = input("Which menu do you wish to select ?: ")
         if choice == "P":

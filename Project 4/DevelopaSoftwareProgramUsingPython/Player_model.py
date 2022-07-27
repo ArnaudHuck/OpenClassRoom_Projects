@@ -15,6 +15,14 @@ class Player:
 
     @staticmethod
     def add_player(first_name, last_name, date_of_birth, gender,  current_rank):
+        """
+        :param first_name: Takes the first name of a player
+        :param last_name: Takes the last name of the player
+        :param date_of_birth: Takes the birth date of the player
+        :param gender: Takes the gender of the player
+        :param current_rank: Takes the current score of the player
+        :return: Returns a new player and adds it to the DB
+        """
         id = DataBaseController.get_len_players_in_db() + 1
 
         new_player = Player(id, first_name, last_name,
@@ -24,10 +32,17 @@ class Player:
 
     @staticmethod
     def get_all_players() -> list['Player']:
+        """
+        :return: Returns a list of all players in the DB
+        """
         return [Player.deserialize(player) for player in DataBaseController.list_player()]
 
     @staticmethod
     def deserialize(serialized_player: dict) -> 'Player':
+        """
+        :param serialized_player: Takes a Player dict with all key, value information
+        :return: Returns an object of class Player
+        """
         id = serialized_player["id"]
         first_name = serialized_player["first_name"]
         last_name = serialized_player["last_name"]
@@ -43,6 +58,9 @@ class Player:
                       )
 
     def serialize(self) -> dict:
+        """
+        :return: Returns a dict with all player key, value information
+        """
         player_data = {'id': self.id,
                        'first_name': self.first_name,
                        'last_name': self.last_name,
@@ -53,6 +71,10 @@ class Player:
 
     @staticmethod
     def get_player(id):
+        """
+        :param id: Takes an int as input
+        :return: Returns the matching player in DB
+        """
         for player in DataBaseController.list_player():
             if Player.deserialize(player).id == id:
                 return Player.deserialize(player)

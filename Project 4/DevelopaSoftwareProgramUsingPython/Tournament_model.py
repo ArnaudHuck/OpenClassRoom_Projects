@@ -26,8 +26,8 @@ class Tournament:
     @staticmethod
     def deserialize_tournament(serialized_tournament: dict) -> 'Tournament':
         """
-        :param serialized_tournament:
-        :return:
+        :param serialized_tournament: Takes a Tournament dict with all key, value information
+        :return: Returns an object of Tournament class
         """
         id = serialized_tournament['id']
         name = serialized_tournament["name"]
@@ -52,6 +52,9 @@ class Tournament:
                           participant_list)
 
     def serialize(self) -> dict:
+        """
+        :return: Returns a dict with all Tournament key, value information
+        """
         tournament_data = {'id': self.id,
                            'name': self.name,
                            'venue': self.venue,
@@ -66,19 +69,40 @@ class Tournament:
 
     @staticmethod
     def get_all_tournaments() -> list['Tournament']:
+        """
+        :return: Returns a list of tournament
+        """
         return [Tournament.deserialize_tournament(tournament) for tournament in DataBaseController.list_tournament()]
 
     @staticmethod
     def get_tournament(id) -> 'Tournament':
+        """
+        :param id: Takes an id as input
+        :return: Returns the matching tournament in DB
+        """
         return Tournament.deserialize_tournament(DataBaseController.get_tournament(id))
 
     @staticmethod
     def get_unfinished_tournament(id) -> 'Tournament':
+        """
+        :param id: Takes an id as input
+        :return: Returns the matching tournament in DB
+        """
         return Tournament.deserialize_tournament(DataBaseController.get_unfinished_tournament(id))
 
     @staticmethod
     def add_tournament(name, venue, date, number_of_rounds, time_control, description,
                        participant_list: list[Player]):
+        """
+        :param name: Takes the tournament name
+        :param venue: Takes the tournament venue
+        :param date: Takes the tournament date
+        :param number_of_rounds: Takes the tournament number of rounds
+        :param time_control: Takes the tournament time control type
+        :param description: Takes the tournament description
+        :param participant_list: Takes the tournament player list
+        :return: Returns a new tournament and adds it to the DB
+        """
         id = DataBaseController.get_len_tournament_in_db() + 1
         list_of_rounds: list[Round] = []
         participant_score: dict = {}
@@ -97,10 +121,19 @@ class Tournament:
 
     @staticmethod
     def get_tournament_rounds(tournament: 'Tournament') -> list[Round]:
+        """
+        :param tournament: Takes a tournament object
+        :return: Returns the tournament list_of_rounds argument
+        """
         return tournament.list_of_rounds
 
     @staticmethod
     def add_tournament_in_progress(tournament: 'Tournament'):
+        """
+        :param tournament: Takes a tournament object
+        :return: if the tournament has not been started yet, adds the tournament in DB
+                 if the tournament has been started, updates its list of round argument
+        """
         if len(tournament.list_of_rounds) == 1:
             DataBaseController.tournament_in_progress_or_ended_db.insert(tournament.serialize())
         else:
@@ -110,12 +143,19 @@ class Tournament:
 
     @staticmethod
     def save_participant_score(tournament: 'Tournament'):
+        """
+        :param tournament: Takes a tournament object
+        :return: Updates its participant score argument
+        """
         DataBaseController.tournament_in_progress_or_ended_db.update({'participant_score':
                                                                       tournament.participant_score},
                                                                      where("id") == tournament.id)
 
     @staticmethod
     def get_all_tournaments_unfinished_or_ended() -> list['Tournament']:
+        """
+        :return: Returns a list of Tournament from the DB
+        """
         return [Tournament.deserialize_tournament(tournament)
                 for tournament in DataBaseController.list_tournament_ended_or_unfinished()]
 

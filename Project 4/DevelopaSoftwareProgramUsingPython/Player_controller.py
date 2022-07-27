@@ -14,6 +14,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def option_choice():
+        """
+        :return: Returns the entry matching the user's input
+        """
         PlayerView.display_options()
         user_input = input().capitalize()
         if user_input == 'N':
@@ -44,22 +47,37 @@ class PlayerController(BaseController):
 
     @staticmethod
     def sorting_default(list_players):
+        """
+        :param list_players: Takes a list of Players
+        :return: Returns the list sorted by id
+        """
         list_players.sort(key=attrgetter("id"))
         return list_players
 
     @staticmethod
     def sorting_alphabetical(list_players: list[Player]):
+        """
+        :param list_players: Takes a list of Players
+        :return: Returns the list sorted by last name
+        """
         list_players.sort(key=attrgetter("last_name", "first_name",
                                          "current_rank", "id"))
         return list_players
 
     @staticmethod
     def sorting_rank(list_players: list[Player]):
+        """
+        :param list_players: Takes a list of Players
+        :return: Returns the list sorted by ranking
+        """
         list_players.sort(key=attrgetter("current_rank"), reverse=True)
         return list_players
 
     @staticmethod
     def add_first_name():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_first_name = False
         while not valid_first_name:
             input_first_name = input("First name : ").capitalize()
@@ -71,6 +89,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def add_last_name():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_last_name = False
         while not valid_last_name:
             input_last_name = input("Last name : ").capitalize()
@@ -82,6 +103,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def add_date_birth():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_birthdate = False
         while not valid_birthdate:
             input_date_birth = input("Date of birth (yyyy.mm.dd) : ")
@@ -106,6 +130,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def add_gender():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_gender = False
         while not valid_gender:
             input_gender = input("Gender (m/f) : ").capitalize()
@@ -117,6 +144,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def add_current_rank():
+        """
+        :return: Returns the user's input after checking consistency
+        """
         valid_rank = False
         while not valid_rank:
             input_current_rank = input("Current Rank : ")
@@ -130,6 +160,9 @@ class PlayerController(BaseController):
 
     @staticmethod
     def new_player():
+        """
+        :return: Returns an object containing all previous inputs
+        """
 
         new_player = []
 
