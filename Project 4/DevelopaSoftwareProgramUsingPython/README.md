@@ -15,7 +15,7 @@ You can create a new virtual env and download all the libraries using the follow
 
 $ pip install ven
 
-$ pip install -r requirement.txt
+$ pip install -r requirements.txt
 
 Launching:
 

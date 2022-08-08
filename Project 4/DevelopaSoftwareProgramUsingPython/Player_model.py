@@ -1,4 +1,6 @@
 from Database import DataBaseController
+from tinydb import where
+from tinydb.operations import set
 
 
 class Player:
@@ -83,3 +85,10 @@ class Player:
 
     def __repr__(self):
         return f"{self.id} {self.first_name} {self.last_name} rank : {self.current_rank}"
+
+    @staticmethod
+    def update_player_rank(player: 'Player'):
+        DataBaseController.player_db.update(set('current_rank', player.current_rank), where("id") == player.id)
+
+
+

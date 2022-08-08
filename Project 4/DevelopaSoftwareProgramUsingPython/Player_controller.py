@@ -5,6 +5,7 @@ from operator import attrgetter
 import re
 from Player_model import Player
 from Player_view import PlayerView
+from main import main
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from Main_Controller import MainController
@@ -19,26 +20,30 @@ class PlayerController(BaseController):
         """
         PlayerView.display_options()
         user_input = input().capitalize()
-        if user_input == 'N':
+        if user_input == 'A':
             PlayerController.new_player()
             return PlayerController.option_choice()
-        elif user_input == 'A':
+        elif user_input == 'B':
             player_list = PlayerController.sorting_alphabetical(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
-        elif user_input == 'D':
+        elif user_input == 'C':
             player_list = PlayerController.sorting_default(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
-        elif user_input == 'R':
+        elif user_input == 'D':
             player_list = PlayerController.sorting_rank(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
-        elif user_input == "B":
+        elif user_input == "E":
+            PlayerController.change_player_rank()
+        elif user_input == "F":
             MainController.home_menu()
+        elif user_input == 'H':
+            main()
         elif user_input == "Q":
             sys.exit()
         else:
@@ -152,7 +157,7 @@ class PlayerController(BaseController):
             input_current_rank = input("Current Rank : ")
             number = re.findall("[0-9]+", input_current_rank)
             if len(number) == 1:
-                if 0 < int(number[0]) < 3000:
+                if 0 < int(number[0]):
                     valid_rank = True
             else:
                 print("A valid rank is required")
@@ -172,3 +177,44 @@ class PlayerController(BaseController):
         new_player.append(PlayerController.add_gender())
         new_player.append(PlayerController.add_current_rank())
         return Player.add_player(new_player[0], new_player[1], new_player[2], new_player[3], new_player[4])
+
+    @staticmethod
+    def change_player_rank():
+        """
+        :return: User selects the player he wants to modify the score, then inputs the new score which is updated in db
+        """
+        player_list = PlayerController.sorting_default(Player.get_all_players())
+        PlayerView.display_player_list(player_list)
+        choice = input("Enter the player id you wish to modify: ")
+        player = Player.get_player(int(choice))
+        print(player)
+        BaseController.wait_input()
+        choice = input("Do you want to modify the current rank ? (Y/N): ")
+        if choice == "Y":
+            print(f'What is the new rank of {player.first_name}?:')
+            valid_rank = False
+            while not valid_rank:
+                new_rank = input("Enter the new rank value: ")
+                number = re.findall("[0-9]+", new_rank)
+                if len(number) == 1:
+                    if 0 < int(number[0]):
+                        valid_rank = True
+                        player.current_rank = int(new_rank)
+                        print(player)
+                        Player.update_player_rank(player)
+                else:
+                    print("A valid rank is required")
+        elif choice == "N":
+            sys.exit()
+        else:
+            print("You need to enter Y or N")
+            BaseController.wait_input()
+            PlayerController.change_player_rank()
+
+
+
+
+
+
+
+

@@ -2,6 +2,7 @@ from Database import DataBaseController
 from Player_model import Player
 from Round_model import Round
 from tinydb import where
+from typing import Optional
 
 
 class Tournament:
@@ -68,11 +69,14 @@ class Tournament:
         return tournament_data
 
     @staticmethod
-    def get_all_tournaments() -> list['Tournament']:
+    def get_all_tournaments() -> Optional[list['Tournament']]:
         """
         :return: Returns a list of tournament
         """
-        return [Tournament.deserialize_tournament(tournament) for tournament in DataBaseController.list_tournament()]
+        if not DataBaseController.list_tournament():
+            return None
+        else:
+            return [Tournament.deserialize_tournament(tournament) for tournament in DataBaseController.list_tournament()]
 
     @staticmethod
     def get_tournament(id) -> 'Tournament':

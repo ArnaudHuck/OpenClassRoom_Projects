@@ -12,6 +12,7 @@ from Player_view import PlayerView
 from Round_model import Round
 from typing import Optional
 from Match_model import Match
+from main import main
 
 
 class TournamentController(BaseController):
@@ -32,33 +33,46 @@ class TournamentController(BaseController):
             BaseController.wait_input()
             return TournamentController.option_choice()
         elif user_input == "C":
-            TournamentView.display_tournament_list(Tournament.get_all_tournaments())
-            tournament_id = input("Enter the tournament id you wish to select: ")
-            list_player = TournamentController.sort_list_of_player_in_tournament_alphabetically(tournament_id)
-            for player in list_player:
-                print(player)
-            BaseController.wait_input()
-            return TournamentController.option_choice()
+            if not TournamentView.display_tournament_list(Tournament.get_all_tournaments()):
+                BaseController.wait_input()
+                return TournamentController.option_choice()
+            else:
+                tournament_id = input("Enter the tournament id you wish to select: ")
+                list_player = TournamentController.sort_list_of_player_in_tournament_alphabetically(tournament_id)
+                for player in list_player:
+                    print(player)
+                BaseController.wait_input()
+                return TournamentController.option_choice()
         elif user_input == "D":
-            TournamentView.display_tournament_list(Tournament.get_all_tournaments())
-            tournament_id = input("Enter the tournament id you wish to select: ")
-            list_player = TournamentController.sort_list_of_player_in_tournament_ranking(tournament_id)
-            for player in list_player:
-                print(player)
-            BaseController.wait_input()
-            return TournamentController.option_choice()
+            if not TournamentView.display_tournament_list(Tournament.get_all_tournaments()):
+                BaseController.wait_input()
+                return TournamentController.option_choice()
+            else:
+                TournamentView.display_tournament_list(Tournament.get_all_tournaments())
+                tournament_id = input("Enter the tournament id you wish to select: ")
+                list_player = TournamentController.sort_list_of_player_in_tournament_ranking(tournament_id)
+                for player in list_player:
+                    print(player)
+                BaseController.wait_input()
+                return TournamentController.option_choice()
         elif user_input == "E":
-            TournamentView.display_tournament_list(Tournament.get_all_tournaments())
-            tournament_id = input("Enter the tournament id you wish to select: ")
-            TournamentView.display_tournament_list_of_rounds(Tournament.get_tournament_rounds
+            if not TournamentView.display_tournament_list(Tournament.get_all_tournaments()):
+                BaseController.wait_input()
+                return TournamentController.option_choice()
+            else:
+                TournamentView.display_tournament_list(Tournament.get_all_tournaments())
+                tournament_id = input("Enter the tournament id you wish to select: ")
+                TournamentView.display_tournament_list_of_rounds(Tournament.get_tournament_rounds
                                                              (Tournament.get_tournament(tournament_id)))
-            BaseController.wait_input()
-            return TournamentController.option_choice()
+                BaseController.wait_input()
+                return TournamentController.option_choice()
         elif user_input == "F":
             tournament = StartTournament()
             tournament()
         elif user_input == "G":
             StartTournament.resume_tournament()
+        elif user_input == "H":
+            main()
         elif user_input == "Q":
             sys.exit()
         else:
@@ -132,6 +146,8 @@ class TournamentController(BaseController):
                                     return "true"
                             if len(number2[2]) == 1:
                                 number2[2] = str(0) + number2[2]
+                            if ending_date_time_obj == beginning_date_time_obj:
+                                return input_beginning_tournament_date.__str__()
                             if ending_date_time_obj > beginning_date_time_obj:
                                 return input_beginning_tournament_date.__str__(), input_ending_tournament_date.__str__()
 
@@ -163,7 +179,7 @@ class TournamentController(BaseController):
         """
         time_control = None
         TournamentView.display_tournament_time_control_options()
-        user_input = input("Select the tournament time control: ")
+        user_input = str(input("Select the tournament time control: "))
         if user_input == "1":
             time_control = "Bullet"
         if user_input == "2":
@@ -187,28 +203,30 @@ class TournamentController(BaseController):
         """
         all_participant: list[Player] = []
         choice = input("Do you wish to add a new player ?  Y/N: ")
-        if choice == "Y":
+        if choice == "N":
+            return all_participant
+        elif choice == "Y":
             all_players = TournamentController.sorting_default(Player.get_all_players())
             PlayerView.display_player_list(all_players)
             while not len(all_participant) == 8:
+                print(all_participant)
                 player_id = int(input("Enter the player id you wish to add to the tournament: "))
                 if player_id <= 0 or player_id > len(all_players):
                     print("You need to input a valid id")
                     BaseController.wait_input()
-                    continue
+                    TournamentController.add_tournament_participant_list()
                 for player in all_participant:
                     if int(player_id) == player.id:
                         print("Selected player is already added to the tournament")
+                        all_participant.clear()
                         BaseController.wait_input()
-                        continue
+                        TournamentController.add_tournament_participant_list()
                 else:
                     added_player = Player.get_player(player_id)
                     all_participant.append(added_player)
-                    print(all_participant)
-        elif choice == "N":
-            return None
         else:
             print("Input Y or N")
+            TournamentController.add_tournament_participant_list()
         return all_participant
 
     @staticmethod
@@ -219,8 +237,8 @@ class TournamentController(BaseController):
         """
         tournament = Tournament.get_tournament(int(user_input))
         list_player = tournament.participant_list
-        new_list = sorted(list_player, key=lambda player: player.last_name)
-        return new_list
+        list_player.sort(key=lambda player: player.last_name)
+        return list_player
 
     @staticmethod
     def sort_list_of_player_in_tournament_ranking(user_input) -> list[Player]:
@@ -230,8 +248,8 @@ class TournamentController(BaseController):
         """
         tournament = Tournament.get_tournament(int(user_input))
         list_player = tournament.participant_list
-        new_list = sorted(list_player, key=lambda player: player.current_rank, reverse=True)
-        return new_list
+        list_player.sort(key=lambda player: player.current_rank, reverse=True)
+        return list_player
 
     @staticmethod
     def sorting_default(list_players) -> list[Player]:

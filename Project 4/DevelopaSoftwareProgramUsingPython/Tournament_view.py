@@ -27,8 +27,12 @@ class TournamentView:
         :param tournaments: Takes a list of tournaments
         :return: Returns the main information of each tournament in the list
         """
-        for tournament in tournaments:
-            print(tournament.name, tournament.date, "\n")
+        if tournaments is None:
+            print("There is no tournaments saved in Database")
+            return None
+        else:
+            for tournament in tournaments:
+                print(tournament.name, tournament.date, "\n")
 
     @staticmethod
     def display_tournament_time_control_options():

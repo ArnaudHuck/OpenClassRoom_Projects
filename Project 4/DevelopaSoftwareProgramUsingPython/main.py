@@ -1,8 +1,9 @@
 import Main_Controller
 import Database
 
-
+# Database.DataBaseController.clean_player_database()
 # Database.DataBaseController.clean_tournament_in_progress_database()
+# Database.DataBaseController.clean_tournament_database()
 
 
 def main():
@@ -12,5 +13,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
 

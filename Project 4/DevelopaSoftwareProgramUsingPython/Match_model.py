@@ -17,7 +17,7 @@ class Match:
 
     def serialize(self) -> dict:
         """
-        :return: Returns a dict containing all match keu, value information
+        :return: Returns a dict containing all match key, value information
         """
         return {"name": self.name,
                 "player_1": Player.serialize(self.player_1),
