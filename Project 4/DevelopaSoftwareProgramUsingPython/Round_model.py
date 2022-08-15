@@ -1,6 +1,5 @@
 from Match_model import Match
 from Player_model import Player
-from collections import Counter
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from Tournament_model import Tournament
@@ -40,6 +39,7 @@ class Round:
         return Round(name,
                      list_of_finished_matches)
 
+    # noinspection PyTypeChecker
     def run(self, sorted_player_list: list[Player], tournament: 'Tournament'):
         """
         :param sorted_player_list: Takes a player list previously sorted
@@ -50,9 +50,7 @@ class Round:
         matches: list[Match] = []
         finished_rounds: list[dict] = [Round.serialize(round) for round in tournament.list_of_rounds]
         finished_matches: list[Match] = [finished_round['list_of_finished_matches']
-                                  for finished_round in finished_rounds]
-
-        print(type(finished_matches))
+                                         for finished_round in finished_rounds]
 
         Match.MATCH_NUMBER = len(finished_matches)
 
@@ -77,10 +75,10 @@ class Round:
                 match.score_player_1 = score_player_1
                 match.score_player_2 = score_player_2
 
-            tournament.participant_score[match.player_1.id] = tournament.participant_score.get(match.player_1.id,
-                                                                                               0) + match.score_player_1
-            tournament.participant_score[match.player_2.id] = tournament.participant_score.get(match.player_2.id,
-                                                                                               0) + match.score_player_2
+            tournament.participant_score[str(match.player_1.id)] = tournament.participant_score.get(
+                str(match.player_1.id), 0) + match.score_player_1
+            tournament.participant_score[str(match.player_2.id)] = tournament.participant_score.get(
+                str(match.player_2.id), 0) + match.score_player_2
 
         return Round(Round.make(tournament).name, matches)
 

@@ -11,7 +11,8 @@ class TournamentView:
         """
         list_options = ["Create new tournament", "List all tournaments",
                         "Alphabetical list players in a tournament", "Ranking list players in a tournament",
-                        "List of rounds in tournament", "Start_new_tournament", "Resume_tournament", "Quit"]
+                        "List of rounds in tournament", "Start_new_tournament",
+                        "Resume_tournament", "Home menu", "Quit"]
         print(f"[A] : {list_options[0]}")
         print(f"[B] : {list_options[1]}")
         print(f"[C] : {list_options[2]}")
@@ -19,7 +20,8 @@ class TournamentView:
         print(f"[E] : {list_options[4]}")
         print(f"[F] : {list_options[5]}")
         print(f"[G] : {list_options[6]}")
-        print(f"[Q] : {list_options[7]}")
+        print(f"[H] : {list_options[7]}")
+        print(f"[Q] : {list_options[8]}")
 
     @staticmethod
     def display_tournament_list(tournaments: list[Tournament]):

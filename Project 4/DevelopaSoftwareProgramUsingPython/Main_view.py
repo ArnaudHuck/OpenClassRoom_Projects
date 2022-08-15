@@ -6,7 +6,7 @@ class MainView:
         """
         :return: Displays the home menu
         """
-        list_options = ["Player_menu", "Tournament_menu", "quit_software"]
+        list_options = ["Player_menu", "Tournament_menu", "Quit"]
         print(f"[P]: {list_options[0]}")
         print(f"[T]: {list_options[1]}")
         print(f"[Q]: {list_options[2]}")

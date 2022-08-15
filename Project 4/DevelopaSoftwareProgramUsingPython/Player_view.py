@@ -9,7 +9,7 @@ class PlayerView:
         :return: Displays the PLayer Menu
         """
         list_options = ["Add New Player", "Alphabetical sorted list", "Ranking sorted list",
-                        "Index sorted list", "Modify player rank", "Return to home menu", "Quit"]
+                        "Index sorted list", "Modify player rank", "Home menu", "Quit"]
         print(f"[A] : {list_options[0]}")
         print(f"[B] : {list_options[1]}")
         print(f"[C] : {list_options[2]}")
@@ -26,4 +26,3 @@ class PlayerView:
         """
         for player in players:
             print(player.serialize(), "\n")
-

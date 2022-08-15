@@ -63,7 +63,7 @@ class TournamentController(BaseController):
                 TournamentView.display_tournament_list(Tournament.get_all_tournaments())
                 tournament_id = input("Enter the tournament id you wish to select: ")
                 TournamentView.display_tournament_list_of_rounds(Tournament.get_tournament_rounds
-                                                             (Tournament.get_tournament(tournament_id)))
+                                                                 (Tournament.get_tournament(tournament_id)))
                 BaseController.wait_input()
                 return TournamentController.option_choice()
         elif user_input == "F":
@@ -209,18 +209,15 @@ class TournamentController(BaseController):
             all_players = TournamentController.sorting_default(Player.get_all_players())
             PlayerView.display_player_list(all_players)
             while not len(all_participant) == 8:
-                print(all_participant)
                 player_id = int(input("Enter the player id you wish to add to the tournament: "))
                 if player_id <= 0 or player_id > len(all_players):
                     print("You need to input a valid id")
                     BaseController.wait_input()
-                    TournamentController.add_tournament_participant_list()
-                for player in all_participant:
-                    if int(player_id) == player.id:
-                        print("Selected player is already added to the tournament")
-                        all_participant.clear()
-                        BaseController.wait_input()
-                        TournamentController.add_tournament_participant_list()
+                    continue
+                elif player_id in [player.id for player in all_participant]:
+                    print("Selected player is already added to the tournament")
+                    BaseController.wait_input()
+                    continue
                 else:
                     added_player = Player.get_player(player_id)
                     all_participant.append(added_player)
@@ -290,7 +287,6 @@ class StartTournament:
         print(Tournament.get_all_tournaments())
         self.tournament = Tournament.get_tournament(int(input("Enter the tournament id you wish to start: ")))
         self.round = Round.make(self.tournament)
-        print(self.round)
         self.sorted_players = self.sort_players_first_tour(self.tournament)
         self.tournament.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament))
         self.tournament.save_participant_score(self.tournament)
@@ -298,14 +294,10 @@ class StartTournament:
         self.leave_or_stay()
 
         for round_index in range(self.tournament.number_of_rounds - 1):
-            print(self.round)
             self.sorted_players.clear()
             self.sorted_players = self.sort_players_next_tours(self.tournament)
-            print(self.tournament.participant_score)
             self.tournament.list_of_rounds.append(self.round.run(self.sorted_players, self.tournament))
-            print(self.tournament.participant_score)
             self.tournament.save_participant_score(self.tournament)
-            print(self.tournament.participant_score)
             self.tournament.add_tournament_in_progress(self.tournament)
             self.leave_or_stay()
         print(self.who_is_winner(self.tournament.participant_score))
@@ -420,7 +412,7 @@ class StartTournament:
         """
 
         new_value = max(participant_final_scores, key=participant_final_scores.get)  # type: ignore
-        return f'{Player.get_player(new_value)} is the big winner'
+        return f'{Player.get_player(int(new_value))} is the big winner'
 
     @staticmethod
     def resume_tournament():
@@ -447,17 +439,11 @@ class StartTournament:
                                                                   match.score_player_1, match.score_player_2))
 
                 for round in range(int(chosen_tournament.number_of_rounds) - len(chosen_tournament.list_of_rounds)):
-                    print(chosen_tournament.participant_score)
-                    print(chosen_tournament.list_of_rounds)
                     sorted_players.clear()
                     sorted_players = StartTournament.sort_players_next_tours(chosen_tournament)
-                    print(sorted_players)
                     tournament_round = Round.make(chosen_tournament)
                     chosen_tournament.list_of_rounds.append(tournament_round.run(sorted_players, chosen_tournament))
-                    print(chosen_tournament.participant_score)
-                    print(chosen_tournament.list_of_rounds)
                     Tournament.save_participant_score(chosen_tournament)
-                    print(chosen_tournament.participant_score)
                     Tournament.add_tournament_in_progress(chosen_tournament)
                     StartTournament.leave_or_stay()
                 print(StartTournament.who_is_winner(chosen_tournament.participant_score))
@@ -473,9 +459,9 @@ class StartTournament:
             choice = input("Enter: Y or N: ")
             if choice == "Y":
                 valid_choice = True
-                sys.exit()
+                main()
             elif choice == "N":
                 valid_choice = True
-                break
+                continue
             else:
                 print("You need to enter Y or N")

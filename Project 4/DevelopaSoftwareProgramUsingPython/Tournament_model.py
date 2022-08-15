@@ -76,7 +76,8 @@ class Tournament:
         if not DataBaseController.list_tournament():
             return None
         else:
-            return [Tournament.deserialize_tournament(tournament) for tournament in DataBaseController.list_tournament()]
+            return [Tournament.deserialize_tournament(tournament)
+                    for tournament in DataBaseController.list_tournament()]
 
     @staticmethod
     def get_tournament(id) -> 'Tournament':
