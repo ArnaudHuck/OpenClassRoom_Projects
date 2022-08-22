@@ -15,10 +15,16 @@ class MainController:
         :return: Displays the home menu
         """
         MainView.home_menu_view()
-        choice = input("Which menu do you wish to select ?: ")
-        if choice == "P":
-            PlayerController.option_choice()
-        if choice == "T":
-            TournamentController.option_choice()
-        if choice == "Q":
-            sys.exit()
+        valid_choice = False
+        while not valid_choice:
+            choice = input("Which menu do you wish to select ?: ")
+            if choice == "P":
+                PlayerController.option_choice()
+            if choice == "T":
+                TournamentController.option_choice()
+            if choice == "Q":
+                sys.exit()
+            else:
+                print("Invalid choice")
+                continue
+

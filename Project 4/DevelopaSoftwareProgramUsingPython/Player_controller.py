@@ -29,12 +29,12 @@ class PlayerController(BaseController):
             PlayerController.wait_input()
             PlayerController.option_choice()
         elif user_input == 'C':
-            player_list = PlayerController.sorting_default(Player.get_all_players())
+            player_list = PlayerController.sorting_rank(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
         elif user_input == 'D':
-            player_list = PlayerController.sorting_rank(Player.get_all_players())
+            player_list = PlayerController.sorting_default(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
@@ -187,29 +187,35 @@ class PlayerController(BaseController):
         PlayerView.display_player_list(player_list)
         choice = input("Enter the player id you wish to modify: ")
         player = Player.get_player(int(choice))
-        print(player)
-        BaseController.wait_input()
-        choice = input("Do you want to modify the current rank ? (Y/N): ")
-        if choice == "Y":
-            print(f'What is the new rank of {player.first_name}?:')
-            valid_rank = False
-            while not valid_rank:
-                new_rank = input("Enter the new rank value: ")
-                number = re.findall("[0-9]+", new_rank)
-                if len(number) == 1:
-                    if 0 < int(number[0]):
-                        valid_rank = True
-                        player.current_rank = int(new_rank)
-                        print(player)
-                        Player.update_player_rank(player)
-                else:
-                    print("A valid rank is required")
-        elif choice == "N":
-            sys.exit()
-        else:
-            print("You need to enter Y or N")
+        if player is None:
+            print("The player does not exists")
             BaseController.wait_input()
             PlayerController.change_player_rank()
+        else:
+            print(player)
+            BaseController.wait_input()
+            choice = input("Do you want to modify the current rank ? (Y/N): ")
+            if choice == "Y":
+                print(f'What is the new rank of {player.first_name}?:')
+                valid_rank = False
+                while not valid_rank:
+                    new_rank = input("Enter the new rank value: ")
+                    number = re.findall("[0-9]+", new_rank)
+                    if len(number) == 1:
+                        if 0 < int(number[0]):
+                            valid_rank = True
+                            player.current_rank = int(new_rank)
+                            print(player)
+                            Player.update_player_rank(player)
+                    else:
+                        print("A valid rank is required")
+                        continue
+            elif choice == "N":
+                PlayerController.option_choice()
+            else:
+                print("You need to enter Y or N")
+                BaseController.wait_input()
+
 
 
 

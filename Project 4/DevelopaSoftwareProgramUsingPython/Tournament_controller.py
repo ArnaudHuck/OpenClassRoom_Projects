@@ -91,7 +91,7 @@ class TournamentController(BaseController):
                 valid_tournament_name = True
                 return input_tournament_name
             else:
-                print("A valid tournament name is required")
+                print("A tournament name is required")
 
     @staticmethod
     def add_tournament_venue():
@@ -103,37 +103,54 @@ class TournamentController(BaseController):
             input_tournament_venue = input("Tournament venue: ")
             if input_tournament_venue != "":
                 valid_tournament_venue = True
-                return input_tournament_venue
             else:
-                print("A valid tournament venue is required")
+                print("A tournament venue is required")
+                continue
+            return input_tournament_venue
 
     @staticmethod
     def add_tournament_date():
         """
         :return: Returns the user's input after checking consistency
         """
-        valid_tournament_date = False
-        while not valid_tournament_date:
-            input_beginning_tournament_date = input("Tournament beginning date (yyyy.mm.dd): ")
-            beginning_date_time_obj = datetime.strptime(input_beginning_tournament_date, '%Y.%m.%d')
-            number = re.findall("[0-9]+", input_beginning_tournament_date)
-            if len(number) == 3:
-                if \
-                        len(number[0]) == 4 and int(number[0]) >= 1900 and 0 < int(number[1]) < 13 \
-                        and 0 < len(number[1]) < 3 and 0 < int(number[2]) < 32 and 0 < len(number[2]) < 3:
-                    if len(number[1]) == 1:
-                        number[1] = str(0) + number[1]
-                    if number[1] == "02":
-                        if int(number[1]) > 29:
-                            return "true"
-                    if len(number[2]) == 1:
-                        number[2] = str(0) + number[2]
-            if beginning_date_time_obj.date() >= date.today():
-                input_ending_tournament_date = input("Tournament ending date (yyyy.mm.dd): ")
-                if input_ending_tournament_date == "":
-                    return input_beginning_tournament_date.__str__()
+
+        tournament_date = []
+
+        valid_tournament_beginning_date = False
+        while not valid_tournament_beginning_date:
+            try:
+                input_beginning_tournament_date = input("Tournament beginning date (yyyy.mm.dd): ")
+                beginning_date_time_obj = datetime.strptime(input_beginning_tournament_date, '%Y.%m.%d')
+                if beginning_date_time_obj.date() <= date.today():
+                    print("You need to enter a tournament date equal to today's date or above")
+                    continue
                 else:
-                    ending_date_time_obj = datetime.strptime(input_ending_tournament_date, '%Y.%m.%d')
+                    number = re.findall("[0-9]+", input_beginning_tournament_date)
+                    if len(number) == 3:
+                        if \
+                                len(number[0]) == 4 and int(number[0]) >= 1900 and 0 < int(number[1]) < 13 \
+                                and 0 < len(number[1]) < 3 and 0 < int(number[2]) < 32 and 0 < len(number[2]) < 3:
+                            if len(number[1]) == 1:
+                                number[1] = str(0) + number[1]
+                            if number[1] == "02":
+                                if int(number[1]) > 29:
+                                    return "true"
+                            if len(number[2]) == 1:
+                                number[2] = str(0) + number[2]
+                    tournament_date.append(input_beginning_tournament_date)
+                    valid_tournament_beginning_date = True
+            except:
+                print("You need to enter a proper tournament beginning date that fits the yyyy.mm.dd format")
+                pass
+
+        valid_tournament_ending_date = False
+        while not valid_tournament_ending_date:
+            try:
+                input_ending_tournament_date = input("Tournament ending date (yyyy.mm.dd): ")
+                ending_date_time_obj = datetime.strptime(input_ending_tournament_date, '%Y.%m.%d')
+                if input_ending_tournament_date in tournament_date:
+                    return tournament_date
+                else:
                     number2 = re.findall("[0-9]+", input_ending_tournament_date)
                     if len(number2) == 3:
                         if \
@@ -146,10 +163,15 @@ class TournamentController(BaseController):
                                     return "true"
                             if len(number2[2]) == 1:
                                 number2[2] = str(0) + number2[2]
-                            if ending_date_time_obj == beginning_date_time_obj:
-                                return input_beginning_tournament_date.__str__()
-                            if ending_date_time_obj > beginning_date_time_obj:
-                                return input_beginning_tournament_date.__str__(), input_ending_tournament_date.__str__()
+                            if ending_date_time_obj < datetime.strptime(tournament_date[0], '%Y.%m.%d'):
+                                print("You need to enter an ending date that is after or equal to the beginning date")
+                            if ending_date_time_obj > datetime.strptime(tournament_date[0], '%Y.%m.%d'):
+                                valid_tournament_ending_date_date = True
+                                tournament_date.append(input_ending_tournament_date)
+                                return tournament_date
+            except:
+                print("You need to enter a proper tournament ending date that fits the yyyy.mm.dd format")
+                pass
 
     @staticmethod
     def add_tournament_number_of_rounds():
@@ -163,13 +185,19 @@ class TournamentController(BaseController):
         while not valid_number:
             choice = input("Y or N: ")
             if choice == "Y":
-                number_of_round = input("Input the desired number of round: ")
-                if number_of_round.isdigit():
-                    valid_number = True
-                else:
-                    print("You need to input an integer")
-            if choice == "N":
+                valid_number = False
+                while not valid_number:
+                    number_of_round = input("Input the desired number of round: ")
+                    if number_of_round.isdigit():
+                        valid_number = True
+                    else:
+                        print("You need to input an integer")
+                        continue
+            elif choice == "N":
                 valid_number = True
+            else:
+                print("You need to enter Y or N")
+                continue
         return number_of_round
 
     @staticmethod
@@ -177,16 +205,20 @@ class TournamentController(BaseController):
         """
         :return: Returns the user's input after checking consistency
         """
-        time_control = None
-        TournamentView.display_tournament_time_control_options()
-        user_input = str(input("Select the tournament time control: "))
-        if user_input == "1":
-            time_control = "Bullet"
-        if user_input == "2":
-            time_control = "Blitz"
-        if user_input == "3":
-            time_control = "Rapid"
-        return time_control
+        valid_time_control = False
+        while not valid_time_control:
+            TournamentView.display_tournament_time_control_options()
+            user_input = str(input("Select the tournament time control: "))
+            if user_input == "1":
+                time_control = "Bullet"
+            elif user_input == "2":
+                time_control = "Blitz"
+            elif user_input == "3":
+                time_control = "Rapid"
+            else:
+                print("You need to input either 1, 2 or 3")
+                continue
+            return time_control
 
     @staticmethod
     def add_tournament_description():
@@ -209,17 +241,22 @@ class TournamentController(BaseController):
             all_players = TournamentController.sorting_default(Player.get_all_players())
             PlayerView.display_player_list(all_players)
             while not len(all_participant) == 8:
-                player_id = int(input("Enter the player id you wish to add to the tournament: "))
-                if player_id <= 0 or player_id > len(all_players):
-                    print("You need to input a valid id")
+                player_id = input("Enter the player id you wish to add to the tournament: ")
+                try:
+                    int(player_id)
+                except:
+                    print("You need to enter a valid id")
+                    continue
+                if int(player_id) <= 0 or int(player_id) > len(all_players):
+                    print("You need to input an id that exists in the database")
                     BaseController.wait_input()
                     continue
-                elif player_id in [player.id for player in all_participant]:
+                elif int(player_id) in [player.id for player in all_participant]:
                     print("Selected player is already added to the tournament")
                     BaseController.wait_input()
                     continue
                 else:
-                    added_player = Player.get_player(player_id)
+                    added_player = Player.get_player(int(player_id))
                     all_participant.append(added_player)
         else:
             print("Input Y or N")
