@@ -89,7 +89,7 @@ class PlayerController(BaseController):
             if input_first_name != "":
                 valid_first_name = True
             else:
-                print("A valid first name is required")
+                print("A first name is required")
         return input_first_name
 
     @staticmethod
@@ -103,7 +103,7 @@ class PlayerController(BaseController):
             if input_last_name != "":
                 valid_last_name = True
             else:
-                print("A valid last name is required")
+                print("A last name is required")
         return input_last_name
 
     @staticmethod
@@ -145,6 +145,7 @@ class PlayerController(BaseController):
                 valid_gender = True
             else:
                 print("A valid gender is required")
+                continue
         return input_gender
 
     @staticmethod
