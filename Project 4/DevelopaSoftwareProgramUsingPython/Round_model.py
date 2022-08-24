@@ -25,7 +25,9 @@ class Round:
         """
         :return: Return a dict containing all round key, value information
         """
-        round_info = {'name': self.name, 'list_of_finished_matches': [Match.serialize(match) for match in self.matches]}
+        round_info = {'name': self.name,
+                      'list_of_finished_matches':
+                          [Match.serialize(match) for match in self.matches]}
         return round_info
 
     @staticmethod
@@ -35,7 +37,9 @@ class Round:
         :return: Returns a round object
         """
         name = serialized_round['name']
-        list_of_finished_matches = [Match.deserialize(match) for match in serialized_round['list_of_finished_matches']]
+        list_of_finished_matches = [Match.deserialize(match) for match in
+                                    serialized_round
+                                    ['list_of_finished_matches']]
         return Round(name,
                      list_of_finished_matches)
 
@@ -44,25 +48,31 @@ class Round:
         """
         :param sorted_player_list: Takes a player list previously sorted
         :param tournament: Takes a tournament object
-        :return: Returns a round with a list of finished matches and updates participant score
+        :return: Returns a round with a list of finished matches and updates
+                 participant score
         """
 
         matches: list[Match] = []
-        finished_rounds: list[dict] = [Round.serialize(round) for round in tournament.list_of_rounds]
-        finished_matches: list[Match] = [finished_round['list_of_finished_matches']
+        finished_rounds: list[dict] = [Round.serialize(round) for round in
+                                       tournament.list_of_rounds]
+        finished_matches: list[Match] = [finished_round
+                                         ['list_of_finished_matches']
                                          for finished_round in finished_rounds]
 
         Match.MATCH_NUMBER = len(finished_matches)
 
         while len(sorted_player_list) > 0:
-            match = Match(self.name, sorted_player_list[0], sorted_player_list[1], 0, 0)
+            match = Match(self.name, sorted_player_list[0],
+                          sorted_player_list[1], 0, 0)
             Match.MATCH_NUMBER += 1
             matches.append(match)
             del sorted_player_list[0:2]
         for match in matches:
 
-            match_result = int(input(f"Select the winner of the match {match.player_1} vs {match.player_2}:"
-                                     f" 1 = player_1 won, 2 = player_2 won, 3 = draw :"))
+            match_result = int(input(f"Select the winner of the match"
+                                     f" {match.player_1} vs {match.player_2}:"
+                                     f" 1 = player_1 won,"
+                                     f" 2 = player_2 won, 3 = draw :"))
             if match_result == 1:
                 score_player_1 = 1
                 match.score_player_1 = score_player_1
@@ -75,9 +85,11 @@ class Round:
                 match.score_player_1 = score_player_1
                 match.score_player_2 = score_player_2
 
-            tournament.participant_score[str(match.player_1.id)] = tournament.participant_score.get(
+            tournament.participant_score[str(match.player_1.id)] =\
+                tournament.participant_score.get(
                 str(match.player_1.id), 0) + match.score_player_1
-            tournament.participant_score[str(match.player_2.id)] = tournament.participant_score.get(
+            tournament.participant_score[str(match.player_2.id)] =\
+                tournament.participant_score.get(
                 str(match.player_2.id), 0) + match.score_player_2
 
         return Round(Round.make(tournament).name, matches)

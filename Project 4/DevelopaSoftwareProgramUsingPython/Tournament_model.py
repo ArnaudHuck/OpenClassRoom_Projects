@@ -7,9 +7,11 @@ from typing import Optional
 
 class Tournament:
 
-    def __init__(self, id: int, name: str, venue: str, date: str, number_of_rounds: int,
-                 time_control: str, description: str, list_of_rounds: list[Round],
-                 participant_score: dict[int, float], participant_list: list[Player]):
+    def __init__(self, id: int, name: str, venue: str, date: str,
+                 number_of_rounds: int, time_control: str, description: str,
+                 list_of_rounds: list[Round],
+                 participant_score: dict[int, float],
+                 participant_list: list[Player]):
 
         if list_of_rounds is None:
             list_of_rounds = []
@@ -27,7 +29,8 @@ class Tournament:
     @staticmethod
     def deserialize_tournament(serialized_tournament: dict) -> 'Tournament':
         """
-        :param serialized_tournament: Takes a Tournament dict with all key, value information
+        :param serialized_tournament: Takes a Tournament dict with all key,
+               value information
         :return: Returns an object of Tournament class
         """
         id = serialized_tournament['id']
@@ -37,7 +40,8 @@ class Tournament:
         number_of_rounds = serialized_tournament["number_of_rounds"]
         time_control = serialized_tournament["time_control"]
         description = serialized_tournament["description"]
-        list_of_rounds = [Round.deserialize_round(round_dict) for round_dict in serialized_tournament["list_of_rounds"]]
+        list_of_rounds = [Round.deserialize_round(round_dict) for round_dict in
+                          serialized_tournament["list_of_rounds"]]
         participant_list = [Player.deserialize(player_dict) for player_dict in
                             serialized_tournament["participant_list"]]
         participant_score = serialized_tournament["participant_score"]
@@ -63,9 +67,11 @@ class Tournament:
                            'number_of_rounds': self.number_of_rounds,
                            'time_control': self.time_control,
                            'description': self.description,
-                           'list_of_rounds': [round.serialize() for round in self.list_of_rounds],
+                           'list_of_rounds': [round.serialize() for round in
+                                              self.list_of_rounds],
                            'participant_score': self.participant_score,
-                           'participant_list': [player.serialize() for player in self.participant_list]}
+                           'participant_list': [player.serialize() for player in
+                                                self.participant_list]}
         return tournament_data
 
     @staticmethod
@@ -85,7 +91,8 @@ class Tournament:
         :param id: Takes an id as input
         :return: Returns the matching tournament in DB
         """
-        return Tournament.deserialize_tournament(DataBaseController.get_tournament(id))
+        return Tournament. \
+            deserialize_tournament(DataBaseController.get_tournament(id))
 
     @staticmethod
     def get_unfinished_tournament(id) -> 'Tournament':
@@ -93,11 +100,12 @@ class Tournament:
         :param id: Takes an id as input
         :return: Returns the matching tournament in DB
         """
-        return Tournament.deserialize_tournament(DataBaseController.get_unfinished_tournament(id))
+        return Tournament.deserialize_tournament(DataBaseController.
+                                                 get_unfinished_tournament(id))
 
     @staticmethod
-    def add_tournament(name, venue, date, number_of_rounds, time_control, description,
-                       participant_list: list[Player]):
+    def add_tournament(name, venue, date, number_of_rounds, time_control,
+                       description, participant_list: list[Player]):
         """
         :param name: Takes the tournament name
         :param venue: Takes the tournament venue
@@ -136,15 +144,18 @@ class Tournament:
     def add_tournament_in_progress(tournament: 'Tournament'):
         """
         :param tournament: Takes a tournament object
-        :return: if the tournament has not been started yet, adds the tournament in DB
-                 if the tournament has been started, updates its list of round argument
+        :return: if the tournament has not been started yet, adds the tournament
+                in DB if the tournament has been started, updates its list of
+                round argument
         """
         if len(tournament.list_of_rounds) == 1:
-            DataBaseController.tournament_in_progress_or_ended_db.insert(tournament.serialize())
+            DataBaseController.tournament_in_progress_or_ended_db. \
+                insert(tournament.serialize())
         else:
-            DataBaseController.tournament_in_progress_or_ended_db.upsert({"list_of_rounds": [Round.serialize(round)
-                                                                          for round in tournament.list_of_rounds]},
-                                                                         where("id") == tournament.id)
+            DataBaseController.tournament_in_progress_or_ended_db. \
+                upsert({"list_of_rounds": [Round.serialize(round) for round in
+                                           tournament.list_of_rounds]},
+                       where("id") == tournament.id)
 
     @staticmethod
     def save_participant_score(tournament: 'Tournament'):
@@ -152,9 +163,10 @@ class Tournament:
         :param tournament: Takes a tournament object
         :return: Updates its participant score argument
         """
-        DataBaseController.tournament_in_progress_or_ended_db.update({'participant_score':
-                                                                      tournament.participant_score},
-                                                                     where("id") == tournament.id)
+        DataBaseController.tournament_in_progress_or_ended_db.update(
+            {'participant_score':
+             tournament.participant_score},
+            where("id") == tournament.id)
 
     @staticmethod
     def get_all_tournaments_unfinished_or_ended() -> list['Tournament']:
@@ -162,7 +174,9 @@ class Tournament:
         :return: Returns a list of Tournament from the DB
         """
         return [Tournament.deserialize_tournament(tournament)
-                for tournament in DataBaseController.list_tournament_ended_or_unfinished()]
+                for tournament in
+                DataBaseController.list_tournament_ended_or_unfinished()]
 
     def __repr__(self):
-        return f"id : {self.id} participant score: {self.participant_score} {self.participant_list}"
+        return f"id : {self.id} participant score: {self.participant_score}" \
+               f" {self.participant_list}"

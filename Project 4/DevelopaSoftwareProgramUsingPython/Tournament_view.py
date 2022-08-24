@@ -10,7 +10,8 @@ class TournamentView:
         :return: Displays the Tournament menu
         """
         list_options = ["Create new tournament", "List all tournaments",
-                        "Alphabetical list players in a tournament", "Ranking list players in a tournament",
+                        "Alphabetical list players in a tournament",
+                        "Ranking list players in a tournament",
                         "List of rounds in tournament", "Start_new_tournament",
                         "Resume_tournament", "Home menu", "Quit"]
         print(f"[A] : {list_options[0]}")
@@ -58,7 +59,8 @@ class TournamentView:
     @staticmethod
     def display_tournament_unfinished():
         """
-        :return: Displays a list of tournament that has at least one played round
+        :return: Displays a list of tournament
+                 that has at least one played round
         """
         for tournament in Tournament.get_all_tournaments_unfinished_or_ended():
             if len(tournament.list_of_rounds) < tournament.number_of_rounds:

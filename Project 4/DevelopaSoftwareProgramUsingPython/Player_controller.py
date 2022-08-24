@@ -24,17 +24,20 @@ class PlayerController(BaseController):
             PlayerController.new_player()
             return PlayerController.option_choice()
         elif user_input == 'B':
-            player_list = PlayerController.sorting_alphabetical(Player.get_all_players())
+            player_list = PlayerController.\
+                          sorting_alphabetical(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
         elif user_input == 'C':
-            player_list = PlayerController.sorting_rank(Player.get_all_players())
+            player_list = PlayerController.\
+                          sorting_rank(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
         elif user_input == 'D':
-            player_list = PlayerController.sorting_default(Player.get_all_players())
+            player_list = PlayerController.\
+                          sorting_default(Player.get_all_players())
             PlayerView.display_player_list(player_list)
             PlayerController.wait_input()
             PlayerController.option_choice()
@@ -117,8 +120,11 @@ class PlayerController(BaseController):
             number = re.findall("[0-9]+", input_date_birth)
             if len(number) == 3:
                 if \
-                        len(number[0]) == 4 and int(number[0]) >= 1900 and 0 < int(number[1]) < 13 \
-                        and 0 < len(number[1]) < 3 and 0 < int(number[2]) < 32 and 0 < len(number[2]) < 3:
+                        len(number[0]) == 4 and int(number[0]) >= 1900\
+                        and 0 < int(number[1]) < 13 \
+                        and 0 < len(number[1]) < 3\
+                        and 0 < int(number[2]) < 32\
+                        and 0 < len(number[2]) < 3:
                     if len(number[1]) == 1:
                         number[1] = str(0) + number[1]
                     if number[1] == "02":
@@ -177,12 +183,14 @@ class PlayerController(BaseController):
         new_player.append(PlayerController.add_date_birth())
         new_player.append(PlayerController.add_gender())
         new_player.append(PlayerController.add_current_rank())
-        return Player.add_player(new_player[0], new_player[1], new_player[2], new_player[3], new_player[4])
+        return Player.add_player(new_player[0], new_player[1],
+                                 new_player[2], new_player[3], new_player[4])
 
     @staticmethod
     def change_player_rank():
         """
-        :return: User selects the player he wants to modify the score, then inputs the new score which is updated in db
+        :return: User selects the player he wants to modify the score,
+                 then inputs the new score which is updated in db
         """
         player_list = PlayerController.sorting_default(Player.get_all_players())
         PlayerView.display_player_list(player_list)
@@ -216,12 +224,3 @@ class PlayerController(BaseController):
             else:
                 print("You need to enter Y or N")
                 BaseController.wait_input()
-
-
-
-
-
-
-
-
-

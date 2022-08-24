@@ -6,7 +6,8 @@ from tinydb.operations import set
 class Player:
 
     def __init__(self, id: int, first_name: str,
-                 last_name: str, date_of_birth: str, gender: str, current_rank: int):
+                 last_name: str, date_of_birth: str, gender: str,
+                 current_rank: int):
 
         self.id = id
         self.first_name = first_name
@@ -20,7 +21,7 @@ class Player:
         """
         :param first_name: Takes the first name of a player
         :param last_name: Takes the last name of the player
-        :param date_of_birth: Takes the birth date of the player
+        :param date_of_birth: Takes the birthdate of the player
         :param gender: Takes the gender of the player
         :param current_rank: Takes the current score of the player
         :return: Returns a new player and adds it to the DB
@@ -37,12 +38,14 @@ class Player:
         """
         :return: Returns a list of all players in the DB
         """
-        return [Player.deserialize(player) for player in DataBaseController.list_player()]
+        return [Player.deserialize(player) for player in
+                DataBaseController.list_player()]
 
     @staticmethod
     def deserialize(serialized_player: dict) -> 'Player':
         """
-        :param serialized_player: Takes a Player dict with all key, value information
+        :param serialized_player: Takes a Player dict with all key,
+               value information
         :return: Returns an object of class Player
         """
         id = serialized_player["id"]
@@ -84,11 +87,11 @@ class Player:
             print('No match')
 
     def __repr__(self):
-        return f"{self.id} {self.first_name} {self.last_name} rank : {self.current_rank}"
+        return f"{self.id} {self.first_name} {self.last_name} " \
+               f"rank : {self.current_rank}"
 
     @staticmethod
     def update_player_rank(player: 'Player'):
-        DataBaseController.player_db.update(set('current_rank', player.current_rank), where("id") == player.id)
-
-
-
+        DataBaseController.player_db.update(set('current_rank',
+                                                player.current_rank),
+                                            where("id") == player.id)

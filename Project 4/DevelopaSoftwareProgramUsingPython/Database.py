@@ -5,7 +5,8 @@ class DataBaseController:
     db = TinyDB("db.json")
     player_db = db.table("Players")
     tournament_db = db.table("Tournament")
-    tournament_in_progress_or_ended_db = db.table("Tournament in progress or ended")
+    tournament_in_progress_or_ended_db = \
+        db.table("Tournament in progress or ended")
     round_db = db.table("Rounds")
     match_db = db.table("Matches")
 
@@ -15,7 +16,7 @@ class DataBaseController:
         :param tournament_id: Takes an int as input
         :return: Returns the tournament matching the input
         """
-        return DataBaseController.tournament_db.get(doc_id=tournament_id)  # type: ignore
+        return DataBaseController.tournament_db.get(doc_id=tournament_id)
 
     @staticmethod
     def get_unfinished_tournament(tournament_id: int) -> dict:
@@ -23,7 +24,8 @@ class DataBaseController:
         :param tournament_id: Takes an int as input
         :return: Returns the tournament matching the input
         """
-        return DataBaseController.tournament_in_progress_or_ended_db.get(doc_id=tournament_id)  # type: ignore
+        return DataBaseController.tournament_in_progress_or_ended_db. \
+            get(doc_id=tournament_id)  # type: ignore
 
     @staticmethod
     def get_len_players_in_db():
@@ -96,7 +98,8 @@ class DataBaseController:
         :param new_tournament: Takes a new tournament
         :return: Adds the new tournament to the DB
         """
-        DataBaseController.tournament_in_progress_or_ended_db.insert(new_tournament)
+        DataBaseController.tournament_in_progress_or_ended_db. \
+            insert(new_tournament)
 
     @staticmethod
     def clean_tournament_in_progress_database():
