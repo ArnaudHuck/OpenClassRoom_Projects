@@ -1,0 +1,76 @@
+body {
+  background-color: black;
+  height: 100vh;
+  font-family: sans-serif;
+  margin: 0px;
+}
+
+footer {
+  height: 100px;
+}
+
+p,
+a,
+span,
+div,
+button {
+  color: white;
+}
+
+a {
+  text-decoration: none;
+}
+
+.contentsWrapper {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.flexProperties {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#logo {
+  filter: invert();
+  height: 100px;
+}
+
+.navbarLinks {
+  width: 200px;
+}
+
+#playButton {
+  display: block;
+  text-align: center;
+  border-radius: 30px;
+  background-color: brown;
+  border: 0;
+  padding: 3px 30px;
+  box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.4);
+  color: gainsboro;
+  width: 100px;
+  padding: 6px 4px;
+  font-family: fantasy;
+  font-size: larger;
+  letter-spacing: 2px;
+}
+
+#playButton:hover {
+  transform: scale(1.2);
+  box-shadow: 7px 7px 10px rgba(255, 255, 255, 0.4);
+  transition: 500ms all;
+  margin: 0 20px 20px 0;
+}
+.currentMovieBox {
+  padding: 30px;
+  height: 400px;
+}
+
+#bgImage {
+  background-image: url("https://img.freepik.com/free-photo/futuristic-background-with-colorful-glowing-abstract-neon-lights_181624-27735.jpg?w=2000");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
