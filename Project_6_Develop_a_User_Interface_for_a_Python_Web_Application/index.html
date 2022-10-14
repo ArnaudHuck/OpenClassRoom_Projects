@@ -1,50 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>JustStreamIt</title>
-    <meta
-      name="description"
-      content="This is an example of a meta description."
-    />
+<html lang="eng">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Just Stream it</title>
+    <meta name="description" content="This is an example of a meta description." />
     <link rel="stylesheet" type="text/css" href="styles.css" />
-  </head>
-  <body>
-    <nav>
-      <div class="contentsWrapper">
-        <div class="flexProperties">
-          <img
-            id="logo"
-            src="https://user.oc-static.com/upload/2020/09/18/16004298835178_P5.png"
-            alt=""
-          />
-          <div class="flexProperties navbarLinks">
-            <a href="#"><p>Home</p></a>
-            <a href="#sliderArea"><p>Categories</p></a>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <div class="flexProperties currentMovieBox" id="bgImage">
-      <div class="contentsWrapper" id="topMovieHead">
-        <div class="movieTitleBox">
-          <!-- Top Movie Info will come here -->
-        </div>
-      </div>
-    </div>
-
-    <div class="contentsWrapper" id="sliderArea">
-      <!-- Imageslider with Hedline will come here -->
-    </div>
-
-    <div class="modal-container" id="modalWindow">
-      <div class="modal">
-        <!-- Modal window content will be created -->
-      </div>
-    </div>
-
     <script src="scripts.js"></script>
-    <footer></footer>
-  </body>
+    <script defer="" src="https://kit.fontawesome.com/3944a4844d.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <img id="logo" src="https://user.oc-static.com/upload/2020/09/18/16004298835178_P5.png" alt="logo">
+        <div class="plateform__name">
+            <h1>JustStreamIt</h1>
+        </div>
+        <nav>
+            <ul class="nav__links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Categories</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container__bestMovie">
+        <div class="container__bestMovie__title">
+            <p><em>Best movie all categories</em></p>
+            <h3 id="best_movie_all_cat_title">Movie Title</h3>
+            <p class="container__bestMovie__title--red">Play</p>
+        </div>
+        <div class="container__bestMovie__photo">
+            <img id="img_best" src="assets/no_image.png" alt="photo_best_movie_all_cat">
+        </div>
+    </div>
+
+    <div id='caroussel_wrapper'>
+    </div>
+    <div id='modal'>
+        <div id="modal_content">
+        </div>
+    </div>
+</body>
+
 </html>

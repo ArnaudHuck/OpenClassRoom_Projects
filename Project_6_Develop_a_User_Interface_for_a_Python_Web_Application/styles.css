@@ -1,76 +1,185 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-  background-color: black;
-  height: 100vh;
-  font-family: sans-serif;
-  margin: 0px;
+    background-image: url("https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: black;
+    height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    ;
+    margin: 0px;
 }
 
-footer {
-  height: 100px;
+.plateform__name {
+    display: flex;
 }
 
-p,
-a,
-span,
-div,
-button {
-  color: white;
+.plateform__name h1 {
+    position: relative;
+    bottom: 10px;
+    color: rgb(31, 20, 20);
+    text-shadow: rgb(236, 236, 236) 1px 0 10px;
+    font-weight: 1000;
 }
 
-a {
-  text-decoration: none;
+header {
+    display: flex;
+    position: sticky;
+    height: 56px;
+    justify-content: space-between;
+    padding: 0 10%;
+    background-color: rgb(168, 168, 222);
+}
+
+.logo {
+    cursor: pointer;
+    padding: 4px;
+}
+
+.nav__links {
+    list-style: none;
+}
+
+.nav__links li {
+    display: inline-block;
+    padding: 0px 20px;
+    text-decoration: none;
+}
+
+.nav__links a {
+    color: aliceblue;
+    text-decoration: none;
+}
+
+.nav__links li a:hover {
+    color: darkblue;
 }
 
 .contentsWrapper {
-  width: 90%;
-  margin: 0 auto;
+    width: 80%;
+    margin: 0 auto;
 }
 
-.flexProperties {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.container__bestMovie {
+    justify-content: space-evenly;
+    color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    width: 95vw;
+    overflow: hidden;
+    flex-direction: row;
+    margin-top: 5vh;
+    font-size: 1.4em;
+    font-weight: bold;
 }
 
-#logo {
-  filter: invert();
-  height: 100px;
+.container__bestMovie__title {
+    color: aliceblue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.navbarLinks {
-  width: 200px;
+.container__bestMovie__title--red {
+    padding: 5px 15px;
+    background-color: rgb(180, 0, 0);
+    color: white;
+    text-shadow: 1px 1px black;
+    border-radius: 10px;
 }
 
-#playButton {
-  display: block;
-  text-align: center;
-  border-radius: 30px;
-  background-color: brown;
-  border: 0;
-  padding: 3px 30px;
-  box-shadow: 0px 2px 10px rgba(255, 255, 255, 0.4);
-  color: gainsboro;
-  width: 100px;
-  padding: 6px 4px;
-  font-family: fantasy;
-  font-size: larger;
-  letter-spacing: 2px;
+.container__bestMovie__photo {
+    display: flex;
 }
 
-#playButton:hover {
-  transform: scale(1.2);
-  box-shadow: 7px 7px 10px rgba(255, 255, 255, 0.4);
-  transition: 500ms all;
-  margin: 0 20px 20px 0;
-}
-.currentMovieBox {
-  padding: 30px;
-  height: 400px;
+.caroussel_wrapper {
+    overflow: hidden;
+    width: 100%;
+    bottom: 20px;
 }
 
-#bgImage {
-  background-image: url("https://img.freepik.com/free-photo/futuristic-background-with-colorful-glowing-abstract-neon-lights_181624-27735.jpg?w=2000");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+.carousel-wrapper * {
+    box-sizing: border-box;
+}
+
+.container_for_seven {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-evenly;
+    overflow: hidden;
+    margin: auto;
+}
+
+.container__title {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: rgb(195, 215, 234);
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: inherit;
+    font-size: 24px;
+    text-decoration: none;
+    text-align: center;
+    margin: 5px;
+}
+
+.container__movies {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 100%;
+    margin: 5px;
+}
+
+
+#modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+#modal_content {
+    background-color: rgba(0, 0, 0, 0.7);
+    margin: 15% auto;
+    padding: 5%;
+    width: 80%;
+    height: max-content;
+    color: white;
+    font-size: 2em;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#modal_content p {
+    font-size: medium;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: red;
+    text-decoration: none;
+    cursor: pointer;
 }
