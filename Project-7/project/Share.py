@@ -1,5 +1,3 @@
-from typing import TYPE_CHECKING
-
 
 SHARE_PURCHASE_LIMIT = 1
 SHARE_FRACTION_LIMIT = 1
@@ -13,17 +11,43 @@ class Share:
         self.price = price
         self.profit = profit
 
-    def calculate_profit(self) -> float:
+    def calculate_benefit(self) -> float:
         return (self.price * self.profit) / 100
 
+    def calculate_performance(self) -> float:
+        return self.profit / self.price
+
+    def __repr__(self):
+        return f"name : {self.name}, price : {self.price}," \
+               f"  profit : {self.profit}"
+
+
+class SharePortfolio:
+
+    def __init__(self, list_of_shares: list['Share']):
+        self.list_of_shares = list_of_shares
+
+    def price(self) -> float:
+        return sum([share.price for share in self.list_of_shares])
+
+    def benefit(self) -> float:
+        return sum([(share.price * share.profit) / 100
+                    for share in self.list_of_shares])
+
+    def value_post_2years(self) -> float:
+        return self.price() + self.benefit()
+
     @staticmethod
-    def calculate_portfolio_profit(shares: list['Share']) -> list[float]:
-        profit_list = []
+    def get_best_portfolio(portfolio_list: list['SharePortfolio'])\
+            -> 'SharePortfolio':
 
-        for share in shares:
-            profit_list.append(share.calculate_profit())
+        portfolio_benefit_list = []
 
-        return profit_list
+        for portfolio in portfolio_list:
+            portfolio_benefit_list.append(portfolio.benefit())
 
-    def __str__(self):
-        return self.name, self.price, self.profit
+        best_portfolio = max(portfolio_benefit_list)
+        best_portfolio_index = portfolio_benefit_list.index(best_portfolio)
+
+        return portfolio_list[best_portfolio_index]
+
