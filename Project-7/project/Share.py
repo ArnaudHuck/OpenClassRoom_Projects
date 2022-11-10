@@ -43,11 +43,22 @@ class SharePortfolio:
 
         portfolio_benefit_list = []
 
-        for portfolio in portfolio_list:
-            portfolio_benefit_list.append(portfolio.benefit())
+        investment = float(input("input the amount of money you wish to invest,"
+                                 "cannot exceed 500$ : "))
 
-        best_portfolio = max(portfolio_benefit_list)
-        best_portfolio_index = portfolio_benefit_list.index(best_portfolio)
+        if investment > MAXIMUM_INVESTMENT:
+            print("Investment value is too high")
+            return SharePortfolio.get_best_portfolio(portfolio_list)
+        elif investment < 0:
+            print("Investment must be a positive number ")
+            return SharePortfolio.get_best_portfolio(portfolio_list)
+        else:
+
+            for portfolio in portfolio_list:
+                portfolio_benefit_list.append(portfolio.benefit())
+
+            best_portfolio = max(portfolio_benefit_list)
+            best_portfolio_index = portfolio_benefit_list.index(best_portfolio)
 
         return portfolio_list[best_portfolio_index]
 

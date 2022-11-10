@@ -1,4 +1,5 @@
-from Algo import get_csv_data, get_all_combinations
+import Algo
+from Algo import get_csv_data, get_all_combinations, create_optimized_list_of_shares
 from Share import Share, SharePortfolio
 
 path = "/Users/Henry/Desktop/gitprojects/" \
@@ -9,7 +10,8 @@ data_set_1 = "/dataset_1.csv"
 data_set_2 = "/dataset_2.csv"
 
 shares_list: list[Share] = (get_csv_data(path + data_set_1))
-print(shares_list)
+(Algo.create_optimized_list_of_shares(shares_list))
+
 """
 main_portfolio = SharePortfolio(shares_list)
 print(SharePortfolio.price(main_portfolio))

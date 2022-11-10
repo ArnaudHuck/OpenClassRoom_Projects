@@ -24,8 +24,6 @@ share_table: list[Share] = [Share("Share-1", 20, 5),
 
 
 portfolio_list = (get_all_combinations(share_table))
-for portfolio in portfolio_list:
-    print(portfolio.benefit())
-
-print(SharePortfolio.get_best_portfolio(portfolio_list).benefit())
+print(len(portfolio_list))
+# print(SharePortfolio.get_best_portfolio(portfolio_list).benefit())
 
