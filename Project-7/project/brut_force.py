@@ -1,5 +1,8 @@
+import tracemalloc
 from Share import Share, SharePortfolio
 from Algo import get_all_combinations
+from time import time
+
 
 share_table: list[Share] = [Share("Share-1", 20, 5),
                             Share("Share-2", 30, 10),
@@ -23,7 +26,14 @@ share_table: list[Share] = [Share("Share-1", 20, 5),
                             Share("Share-20", 114, 18)]
 
 
-portfolio_list = (get_all_combinations(share_table))
-print(len(portfolio_list))
-# print(SharePortfolio.get_best_portfolio(portfolio_list).benefit())
+def brut_force():
+    start_time = time()
+    tracemalloc.start()
+    portfolio_list = (get_all_combinations(share_table))
+    best_portfolio = SharePortfolio.pop_best_portfolio(portfolio_list)
+    current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
+    print('Memory use : ' + f'{current / 10 ** 6} MB, {peak / 10 ** 6} MB ')
+    print('Run time in seconds: '), print(round(time() - start_time, 3))
+    return best_portfolio
 

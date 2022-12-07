@@ -10,12 +10,7 @@ class Share:
         self.name = name
         self.price = price
         self.profit = profit
-
-    def calculate_benefit(self) -> float:
-        return (self.price * self.profit) / 100
-
-    def calculate_performance(self) -> float:
-        return self.profit / self.price
+        self.benefit = (price * profit) / 100
 
     def __repr__(self):
         return f"name : {self.name}, price : {self.price}," \
@@ -24,41 +19,48 @@ class Share:
 
 class SharePortfolio:
 
-    def __init__(self, list_of_shares: list['Share']):
-        self.list_of_shares = list_of_shares
+    @staticmethod
+    def make(shares: list['Share']) -> 'SharePortfolio':
+        benefit = sum([share.benefit for share in shares])
+        return SharePortfolio(list_of_shares=shares, benefit=benefit)
 
-    def price(self) -> float:
+    def __init__(self, list_of_shares: list['Share'], benefit: float):
+        self.list_of_shares = list_of_shares
+        self.benefit = benefit
+
+    def price(self):
         return sum([share.price for share in self.list_of_shares])
 
-    def benefit(self) -> float:
-        return sum([(share.price * share.profit) / 100
-                    for share in self.list_of_shares])
+    def efficiency(self) -> float:
+        return (self.benefit / self.price()) * 100
 
     def value_post_2years(self) -> float:
-        return self.price() + self.benefit()
+        return self.price() + self.benefit
+
+    def append_share(self, share: 'Share'):
+
+        return SharePortfolio(list_of_shares=self.list_of_shares + [share],
+                              benefit=self.benefit + share.benefit)
+
+    def __str__(self):
+        return f'{self.list_of_shares}'
 
     @staticmethod
-    def get_best_portfolio(portfolio_list: list['SharePortfolio'])\
+    def pop_best_portfolio(portfolios_list: list['SharePortfolio'])\
             -> 'SharePortfolio':
 
         portfolio_benefit_list = []
 
-        investment = float(input("input the amount of money you wish to invest,"
-                                 "cannot exceed 500$ : "))
+        # TODO: write that in a prettier way
 
-        if investment > MAXIMUM_INVESTMENT:
-            print("Investment value is too high")
-            return SharePortfolio.get_best_portfolio(portfolio_list)
-        elif investment < 0:
-            print("Investment must be a positive number ")
-            return SharePortfolio.get_best_portfolio(portfolio_list)
-        else:
+        for portfolio in portfolios_list:
+            portfolio_benefit_list.append(portfolio.benefit)
 
-            for portfolio in portfolio_list:
-                portfolio_benefit_list.append(portfolio.benefit())
+        best_portfolio_profit = max(portfolio_benefit_list)
+        best_portfolio_index = \
+            portfolio_benefit_list.index(best_portfolio_profit)
+        best_portfolio = portfolios_list[best_portfolio_index]
+        portfolios_list.pop(best_portfolio_index)
 
-            best_portfolio = max(portfolio_benefit_list)
-            best_portfolio_index = portfolio_benefit_list.index(best_portfolio)
-
-        return portfolio_list[best_portfolio_index]
+        return best_portfolio
 

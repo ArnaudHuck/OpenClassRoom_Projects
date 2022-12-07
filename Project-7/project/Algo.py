@@ -1,9 +1,8 @@
 import numpy as np
-
 from Share import Share, SharePortfolio, MAXIMUM_INVESTMENT
 import itertools
 import csv
-from numpy import array_split
+from operator import attrgetter
 
 
 def is_valid_portfolio(share_portfolio: SharePortfolio,
@@ -48,30 +47,30 @@ def get_csv_data(data_csv_path: str) -> list[Share]:
     shares = [Share(action_name, float(action_cost), float(action_profit))
               for action_name, action_cost, action_profit in data
               if is_valid_share(action_cost, action_profit)]
+
     return shares
 
 
-def get_best_share(shares: list[Share]) -> Share:
+def pop_best_share(shares: list[Share]) -> Share:
 
-    share_performance_list = []
-
+    share_benefit = [share.benefit for share in shares]
+    best_benefit = max(share_benefit)
+    best_benefit_index = share_benefit.index(best_benefit)
     for share in shares:
-        share_performance_list.append(share.calculate_performance())
+        if share.benefit == best_benefit:
+            best_share = shares[best_benefit_index]
+            shares.pop(best_benefit_index)
 
-    best_performance = max(share_performance_list)
-    best_performance_index = share_performance_list.index(best_performance)
-
-    return shares[best_performance_index]
+            return best_share
 
 
 def create_optimized_list_of_shares(shares: list[Share]) -> list[Share]:
 
     new_list_of_shares: list[Share] = []
 
-    while sum(share.price for share in new_list_of_shares) < 500:
-        best_share = get_best_share(shares)
+    while sum(share.price for share in new_list_of_shares) < MAXIMUM_INVESTMENT:
+        best_share = pop_best_share(shares)
         new_list_of_shares.append(best_share)
-        shares.pop(shares.index(best_share))
 
     return new_list_of_shares
 
@@ -80,33 +79,29 @@ def get_all_combinations(shares: list[Share]) -> list[SharePortfolio]:
     combination_list = []
 
     for n in range(len(shares) + 1):
-        combination_list.extend([SharePortfolio(list(i))
+        combination_list.extend([SharePortfolio(list(i), sum(share.benefit for
+                                                             share in i))
                                 for i in list(itertools.combinations(shares,
                                                                      n))
                                 if is_valid_portfolio
-                                 ((SharePortfolio(list(i))),
+                                 ((SharePortfolio(list(i), sum(share.benefit for
+                                                               share in i))),
                                 MAXIMUM_INVESTMENT)])
 
     return combination_list
 
 
-def split_share_list_into_sub_lists(shares: list[Share]) -> list[Share]:
+def sort_list_of_shares(shares):
+    benefit_list = [share.benefit for share in shares]
 
-    array = np.array(shares)
+    sorted_list = []
 
-    list_of_list = [x.tolist() for x in np.array_split(array, 10)]
+    new_dict = {shares[i]: benefit_list[i] for i in range(len(benefit_list))}
 
-    return list_of_list
+    s = {k: v for k, v in sorted(new_dict.items(), key=lambda item: item[1],
+                                 reverse=False)}
 
+    for i in s.keys():
+        sorted_list.append(i)
 
-def get_all_combinations_from_several_lists_of_share(lists_of_shares:
-                                                     list[list[Share]])\
-        -> [list[SharePortfolio]]:
-
-    combination_list = []
-
-    for share_list in lists_of_shares:
-        combination_list.extend(get_all_combinations(share_list))
-
-    return combination_list
-
+    return sorted_list
