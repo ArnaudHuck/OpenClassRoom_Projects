@@ -1,8 +1,7 @@
-import numpy as np
 from Share import Share, SharePortfolio, MAXIMUM_INVESTMENT
 import itertools
 import csv
-from operator import attrgetter
+
 
 
 def is_valid_portfolio(share_portfolio: SharePortfolio,
