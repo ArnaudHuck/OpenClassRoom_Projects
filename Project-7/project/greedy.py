@@ -6,6 +6,12 @@ from Share import MAXIMUM_INVESTMENT
 
 
 def greedy_algorithm(shares: list[Share]) -> SharePortfolio:
+    """
+    :param shares: Take a list of shares
+    :return: A share portfolio filled with the best shares of the list
+             previously sorted. We had shares until the maximum investment
+             amount is reached
+    """
     share_portfolio = SharePortfolio(list_of_shares=[], benefit=0)
     sorted_shares = sort_list_of_shares(shares)
     portfolio_cost = 0

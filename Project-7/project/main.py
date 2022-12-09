@@ -14,6 +14,10 @@ shares = get_csv_data(path + data_set_2)
 
 
 def display_portfolio(shareportfolio: SharePortfolio):
+    """
+    :param shareportfolio: Take a share portfolio
+    :return: The main values of the share portfolio
+    """
 
     for share in shareportfolio.list_of_shares:
         print(share, '\n')

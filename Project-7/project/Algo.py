@@ -3,9 +3,14 @@ import itertools
 import csv
 
 
-
 def is_valid_portfolio(share_portfolio: SharePortfolio,
                        investment_amount: float) -> bool:
+    """
+    :param share_portfolio: Take a share portfolio previously created
+    :param investment_amount: Take an investment amount that will be a limit
+    :return: A bool that validates or not if the share portfolio must be
+             taken into account
+    """
     is_valid = False
 
     try:
@@ -18,6 +23,11 @@ def is_valid_portfolio(share_portfolio: SharePortfolio,
 
 
 def is_valid_share(share_price: str, share_profit: str) -> bool:
+    """
+    :param share_price: Take the share price of a share
+    :param share_profit: Take the share profit of a share
+    :return: A bool that validates if the share must be taken into account
+    """
     is_valid = False
 
     try:
@@ -30,7 +40,10 @@ def is_valid_share(share_price: str, share_profit: str) -> bool:
 
 
 def get_csv_data(data_csv_path: str) -> list[Share]:
-    """Function to get data from a CSV file"""
+    """
+    :param data_csv_path: Take a csv file holding the data set
+    :return: A list of shares that are valid
+    """
 
     # Init
     data = []
@@ -50,31 +63,12 @@ def get_csv_data(data_csv_path: str) -> list[Share]:
     return shares
 
 
-def pop_best_share(shares: list[Share]) -> Share:
-
-    share_benefit = [share.benefit for share in shares]
-    best_benefit = max(share_benefit)
-    best_benefit_index = share_benefit.index(best_benefit)
-    for share in shares:
-        if share.benefit == best_benefit:
-            best_share = shares[best_benefit_index]
-            shares.pop(best_benefit_index)
-
-            return best_share
-
-
-def create_optimized_list_of_shares(shares: list[Share]) -> list[Share]:
-
-    new_list_of_shares: list[Share] = []
-
-    while sum(share.price for share in new_list_of_shares) < MAXIMUM_INVESTMENT:
-        best_share = pop_best_share(shares)
-        new_list_of_shares.append(best_share)
-
-    return new_list_of_shares
-
-
 def get_all_combinations(shares: list[Share]) -> list[SharePortfolio]:
+    """
+    :param shares: Take a list of shares
+    :return: A list of all the valid share portfolio that can be created by
+             combination
+    """
     combination_list = []
 
     for n in range(len(shares) + 1):
@@ -83,14 +77,19 @@ def get_all_combinations(shares: list[Share]) -> list[SharePortfolio]:
                                 for i in list(itertools.combinations(shares,
                                                                      n))
                                 if is_valid_portfolio
-                                 ((SharePortfolio(list(i), sum(share.benefit for
-                                                               share in i))),
+                                 ((SharePortfolio(list(i),
+                                                  sum(share.benefit for
+                                                      share in i))),
                                 MAXIMUM_INVESTMENT)])
 
     return combination_list
 
 
-def sort_list_of_shares(shares):
+def sort_list_of_shares(shares: list[Share]):
+    """
+    :param shares: Take a list of shares
+    :return: The list of shares sorted by profit in absolute value
+    """
     benefit_list = [share.benefit for share in shares]
 
     sorted_list = []

@@ -27,6 +27,10 @@ share_table: list[Share] = [Share("Share-1", 20, 5),
 
 
 def brut_force():
+    """
+    :return: The best combination of shares among all possible combination
+             previously created
+    """
     start_time = time()
     tracemalloc.start()
     portfolio_list = (get_all_combinations(share_table))
@@ -36,4 +40,3 @@ def brut_force():
     print('Memory use : ' + f'{current / 10 ** 6} MB, {peak / 10 ** 6} MB ')
     print('Run time in seconds: '), print(round(time() - start_time, 3))
     return best_portfolio
-

@@ -13,6 +13,13 @@ data_set_2 = "/dataset_2.csv"
 def dynamic_algorithm(shares: list[Share],
                       c: int = MAXIMUM_INVESTMENT) \
         -> SharePortfolio:
+    """
+
+    :param shares: List of shares taken from the csv file
+    :param c: Maximum investment representing the maximum weight
+    :return: The last cell of the table holding the best share portfolio for n
+             shares and maximum investment amount
+    """
 
     start_time = time()
     tracemalloc.start()
@@ -49,5 +56,4 @@ def dynamic_algorithm(shares: list[Share],
     print('Memory use : ' + f'{current / 10 ** 6} MB, {peak / 10 ** 6} MB ')
     print('Run time in seconds: '), print(round(time() - start_time, 3))
     return table[n][max_cost]
-
 
