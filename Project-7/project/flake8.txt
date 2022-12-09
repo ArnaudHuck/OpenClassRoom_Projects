@@ -1,0 +1,1 @@
+src/greedy.py:29:9: E722 do not use bare 'except'
